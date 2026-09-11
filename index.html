@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rotimatic NEXT — Automatic Roti Maker | Fresh, Hot Rotis in Minutes</title>
+  <meta name="description" content="Experience Rotimatic NEXT, the world's most advanced 3D automatic roti maker. Fresh, hot, puffed round rotis in minutes with zero effort." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- 7. TOP OFFERS BANNER STRIP -->
+  <aside class="offers-banner" id="offersBanner" aria-label="Special Offers">
+    <div class="banner-inner container">
+      <div class="banner-badge">
+        <span class="pulse-dot"></span>
+        <span>LIMITED TIME FESTIVE LAUNCH</span>
+      </div>
+      <div class="banner-ticker">
+        <span>✨ Limited Time Price</span>
+        <span class="bullet">•</span>
+        <span>🛡️ 5 Year Comprehensive Guarantee</span>
+        <span class="bullet">•</span>
+        <span>🚚 Free All India Express Delivery</span>
+        <span class="bullet">•</span>
+        <span>⚡ 50% Advance Booking Available</span>
+      </div>
+      <div class="banner-contact">
+        <a href="https://wa.me/919876543210?text=Hi%2C%20I%20am%20interested%20in%20Rotimatic%20NEXT" target="_blank" rel="noopener noreferrer" class="whatsapp-btn">
+          <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.08L7.81 18.91L4.69 19.73L5.52 16.69L5.33 16.39C4.54 15.13 4.12 13.54 4.12 11.91C4.12 7.37 7.82 3.67 12.05 3.67ZM8.94 7.39C8.76 7.39 8.46 7.46 8.21 7.73C7.96 8 7.25 8.66 7.25 10.03C7.25 11.4 8.25 12.72 8.39 12.91C8.53 13.1 10.32 15.86 13.06 17.04C15.34 18.02 15.8 17.82 16.29 17.78C16.78 17.73 17.88 17.12 18.11 16.48C18.34 15.84 18.34 15.29 18.27 15.18C18.2 15.06 18.02 14.99 17.74 14.85C17.47 14.72 16.1 14.04 15.85 13.95C15.6 13.86 15.41 13.81 15.23 14.09C15.05 14.36 14.52 14.99 14.36 15.18C14.2 15.36 14.04 15.38 13.77 15.25C13.5 15.11 12.61 14.82 11.56 13.89C10.74 13.16 10.19 12.26 10.03 11.98C9.87 11.71 10.01 11.56 10.15 11.42C10.27 11.3 10.42 11.11 10.56 10.95C10.7 10.79 10.74 10.67 10.83 10.49C10.92 10.31 10.88 10.15 10.81 10.01C10.74 9.87 10.21 8.52 9.97 7.99C9.75 7.47 9.52 7.54 9.35 7.53L8.94 7.39Z"/>
+          </svg>
+          <span>WhatsApp Care</span>
+        </a>
+        <span class="care-hours">📞 10 AM – 7 PM Customer Care</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- NAVIGATION HEADER -->
+  <header class="site-header" id="siteHeader">
+    <nav class="nav-container container" aria-label="Main Navigation">
+      <a href="#" class="brand-logo" aria-label="Rotimatic NEXT Home">
+        <span class="logo-mark">
+          <svg viewBox="0 0 36 36" fill="none" width="28" height="28">
+            <circle cx="18" cy="18" r="16" stroke="url(#logoGlow)" stroke-width="3"/>
+            <path d="M12 18C12 14.6863 14.6863 12 18 12C21.3137 12 24 14.6863 24 18C24 21.3137 21.3137 24 18 24" stroke="#FF8A00" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="18" cy="18" r="3.5" fill="#FF8A00"/>
+            <defs>
+              <linearGradient id="logoGlow" x1="0" y1="0" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#FF8A00"/>
+                <stop offset="1" stop-color="#FFA843"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </span>
+        <span class="brand-name">
+          ROTIMATIC <span class="brand-badge-next">NEXT</span>
+        </span>
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#hero" class="nav-link active">Overview</a>
+        <a href="#variants" class="nav-link">Variants</a>
+        <a href="#howItWorks" class="nav-link">How It Works</a>
+        <a href="#features" class="nav-link">Features</a>
+        <a href="#specs" class="nav-link">Specs & Pricing</a>
+        <a href="#reviews" class="nav-link">Reviews</a>
+      </div>
+
+      <div class="nav-actions">
+        <button class="cart-btn" id="headerCartBtn" aria-label="Cart" onclick="openCheckoutModal()">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span class="cart-counter" id="cartCountBadge">1</span>
+        </button>
+        <button class="btn btn-primary nav-cta-btn" onclick="openCheckoutModal()">
+          Buy Now <span class="arrow-icon">→</span>
+        </button>
+        <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 1. HERO SECTION -->
+    <section class="hero-section" id="hero">
+      <div class="hero-bg-lights">
+        <div class="studio-spotlight"></div>
+        <div class="ambient-glow orange-glow"></div>
+        <div class="ambient-glow warm-glow"></div>
+      </div>
+
+      <div class="container hero-container">
+        <div class="hero-text-content">
+          <div class="hero-badge">
+            <span class="badge-icon">👑</span>
+            <span>Next-Generation Robotic Culinary Engineering</span>
+          </div>
+          <h1 class="hero-headline">
+            Fresh, Hot Rotis<br />
+            <span class="gradient-text">in Minutes.</span>
+          </h1>
+          <p class="hero-subheadline">
+            Automatic Roti Maker for the Modern Indian Kitchen. Fully automated mixing, kneading, flattening, and 360° puffed baking at the touch of a button.
+          </p>
+
+          <!-- Current Active Selection Pill -->
+          <div class="hero-selection-pill">
+            <span class="pill-indicator" id="heroVariantDot"></span>
+            <span class="pill-title">Selected:</span>
+            <strong id="heroVariantTitle">Polar White Edition</strong>
+            <span class="pill-divider">|</span>
+            <span class="pill-price" id="heroPriceTag">₹14,999</span>
+            <span class="pill-savings">Save ₹5,000</span>
+          </div>
+
+          <div class="hero-cta-group">
+            <button class="btn btn-primary btn-lg pulse-shadow" onclick="openCheckoutModal()">
+              <span>Buy Now</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+            <a href="#howItWorks" class="btn btn-secondary btn-lg">
+              <span class="play-icon-circle">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </span>
+              <span>Watch How It Works</span>
+            </a>
+          </div>
+
+          <div class="hero-guarantee-bar">
+            <div class="guarantee-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF8A00" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <span>5 Year Warranty</span>
+            </div>
+            <div class="guarantee-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF8A00" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 14 14"/>
+              </svg>
+              <span>60 Rotis/Hour</span>
+            </div>
+            <div class="guarantee-item">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#FF8A00" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+              <span>100% Puff Guarantee</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D INTERACTIVE PRODUCT STAGE -->
+        <div class="hero-3d-stage" id="hero3DStage">
+          <div class="stage-lighting-reflect"></div>
+          <div class="product-3d-card" id="product3DCard">
+            <!-- Glass glare overlay for 3D tilt -->
+            <div class="glare-layer" id="glareLayer"></div>
+
+            <!-- Product Render Containers -->
+            <div class="product-image-wrap">
+              <img
+                id="heroProductImage"
+                src="assets/rotimatic-white.jpg"
+                alt="Rotimatic NEXT Automatic Roti Maker 3D Render"
+                class="product-render active"
+              />
+              <div class="product-badge-float">
+                <span class="live-tag">3D Interactive</span>
+                <span class="badge-text">Move mouse to tilt</span>
+              </div>
+            </div>
+
+            <!-- Warm steam animation element -->
+            <div class="steam-emitter">
+              <span class="steam-puff p1"></span>
+              <span class="steam-puff p2"></span>
+              <span class="steam-puff p3"></span>
+            </div>
+
+            <!-- Pedestal shadow -->
+            <div class="stage-pedestal-shadow"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Scroll Indicator -->
+      <a href="#variants" class="scroll-down-hint" aria-label="Scroll to Variant Selector">
+        <span class="mouse-icon">
+          <span class="wheel"></span>
+        </span>
+        <span class="hint-text">Scroll to explore</span>
+      </a>
+    </section>
+
+    <!-- 2. PRODUCT VARIANT SELECTOR SECTION -->
+    <section class="variants-section" id="variants">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-kicker">CHOOSE YOUR FINISH</div>
+          <h2 class="section-title">Engineered for Your Kitchen Style</h2>
+          <p class="section-subtitle">
+            Two distinct luxury aesthetics, identical revolutionary robotics. Switch variants below to preview live on the hero stage.
+          </p>
+        </div>
+
+        <div class="variants-grid">
+          <!-- Variant 1: Polar White -->
+          <div
+            class="variant-card active"
+            id="variantCardWhite"
+            onclick="selectVariant('white')"
+            tabindex="0"
+            role="button"
+            aria-pressed="true"
+          >
+            <div class="variant-top-bar">
+              <span class="variant-tag popular">Most Popular</span>
+              <span class="guarantee-shield-badge">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                5 Year Guarantee
+              </span>
+            </div>
+
+            <div class="variant-image-box">
+              <img src="assets/rotimatic-white.jpg" alt="Rotimatic NEXT Polar White Edition" loading="lazy" />
+            </div>
+
+            <div class="variant-info">
+              <div class="variant-color-dot white-dot"></div>
+              <h3 class="variant-name">Polar White Edition</h3>
+              <p class="variant-desc">Matte porcelain white body with crystal clear ingredient canisters. Fits seamlessly into contemporary bright kitchens.</p>
+              
+              <div class="variant-pricing">
+                <div class="price-wrap">
+                  <span class="currency">₹</span>
+                  <span class="amount">14,999</span>
+                </div>
+                <div class="original-price">
+                  <span class="strikethrough">₹19,999</span>
+                  <span class="discount-badge">Save ₹5,000</span>
+                </div>
+              </div>
+
+              <div class="variant-features-mini">
+                <span>✓ High-Gloss Display</span>
+                <span>✓ Standard Silent Motors</span>
+                <span>✓ 5-Year Full Warranty</span>
+              </div>
+
+              <button class="btn btn-variant-select select-white-btn" type="button">
+                <span class="select-text">Selected (Active)</span>
+                <span class="check-icon">✓</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Variant 2: Onyx Black -->
+          <div
+            class="variant-card"
+            id="variantCardBlack"
+            onclick="selectVariant('black')"
+            tabindex="0"
+            role="button"
+            aria-pressed="false"
+          >
+            <div class="variant-top-bar">
+              <span class="variant-tag flagship">Flagship Edition</span>
+              <span class="guarantee-shield-badge gold-shield">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                5 Year Guarantee
+              </span>
+            </div>
+
+            <div class="variant-image-box">
+              <img src="assets/rotimatic-black.jpg" alt="Rotimatic NEXT Luxury Onyx Black Edition" loading="lazy" />
+            </div>
+
+            <div class="variant-info">
+              <div class="variant-color-dot black-dot"></div>
+              <h3 class="variant-name">Onyx Black Edition</h3>
+              <p class="variant-desc">Brushed obsidian anodized titanium chassis with ambient orange LED underglow. Designed for bespoke luxury dark spaces.</p>
+              
+              <div class="variant-pricing">
+                <div class="price-wrap">
+                  <span class="currency">₹</span>
+                  <span class="amount">24,999</span>
+                </div>
+                <div class="original-price">
+                  <span class="strikethrough">₹32,999</span>
+                  <span class="discount-badge">Save ₹8,000</span>
+                </div>
+              </div>
+
+              <div class="variant-features-mini">
+                <span>✓ Ambient Orange Halo Light</span>
+                <span>✓ Turbo Kneading Core</span>
+                <span>✓ Smoked Glass Canisters</span>
+              </div>
+
+              <button class="btn btn-variant-select select-black-btn" type="button">
+                <span class="select-text">Choose Onyx Black</span>
+                <span class="check-icon">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. "HOW IT WORKS" VIDEO & PROCESS SECTION -->
+    <section class="how-it-works-section" id="howItWorks">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-kicker">ROBOTIC PRECISION IN ACTION</div>
+          <h2 class="section-title">How Rotimatic NEXT Works</h2>
+          <p class="section-subtitle">
+            From raw whole wheat flour to a golden puffed roti in under 90 seconds. 10 software-calibrated motors orchestrate each roti with micro-millimeter precision.
+          </p>
+        </div>
+
+        <div class="how-it-works-layout">
+          <!-- Interactive Video Simulation Player -->
+          <div class="video-player-wrapper">
+            <div class="video-frame" id="videoFrame">
+              <img
+                src="assets/roti-demo.jpg"
+                alt="Rotimatic NEXT internal baking chamber pressing and puffing fresh roti"
+                class="video-poster-img"
+                id="videoPoster"
+              />
+
+              <!-- Simulated Live HUD Overlay -->
+              <div class="video-hud-overlay">
+                <div class="hud-top">
+                  <div class="hud-live-tag">
+                    <span class="rec-dot"></span>
+                    <span>INTERNAL CHAMBER TELEMETRY</span>
+                  </div>
+                  <div class="hud-temp" id="hudTemp">CHAMBER: 235°C</div>
+                </div>
+
+                <!-- Center Play / Replay Button -->
+                <button class="btn-play-video" id="playVideoBtn" aria-label="Play Live Demonstration" onclick="togglePlaySimulation()">
+                  <div class="play-pulse-ring"></div>
+                  <svg id="playIconSvg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                </button>
+
+                <!-- Dynamic Step Caption on Video -->
+                <div class="hud-step-caption" id="hudStepCaption">
+                  <span class="badge-step-number" id="hudStepNumber">STEP 2</span>
+                  <span class="hud-step-text" id="hudStepText">Twin Calibrated Discs Compressing Dough Ball</span>
+                </div>
+
+                <!-- Video timeline bar -->
+                <div class="video-timeline-bar" onclick="scrubTimeline(event)">
+                  <div class="timeline-fill" id="timelineFill"></div>
+                  <div class="timeline-time">
+                    <span id="timeElapsed">0:45</span> / <span id="timeDuration">1:30</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="video-caption-foot">
+              <span class="icon">ℹ️</span>
+              <span>Ultra-slow-motion capture inside the high-temp non-stick 360° baking disc.</span>
+            </div>
+          </div>
+
+          <!-- 3-Step Visual Explainer Progression -->
+          <div class="steps-progression-list">
+            <!-- Step 1 -->
+            <div class="step-card active" id="stepCard1" onclick="jumpToStep(1)">
+              <div class="step-badge-col">
+                <div class="step-number-circle">1</div>
+                <div class="step-connector-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-header-row">
+                  <h3 class="step-heading">Add Flour, Water & Oil</h3>
+                  <span class="step-time-pill">0 sec setup</span>
+                </div>
+                <p class="step-details">
+                  Load your preferred whole wheat, multigrain, or gluten-free flour into the separate top airtight canisters. Add water and oil once — enough for 20+ rotis per fill.
+                </p>
+                <div class="step-metric">
+                  <span class="metric-label">Sensors:</span>
+                  <span class="metric-value">Optical Flour Density Check</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step-card" id="stepCard2" onclick="jumpToStep(2)">
+              <div class="step-badge-col">
+                <div class="step-number-circle">2</div>
+                <div class="step-connector-line"></div>
+              </div>
+              <div class="step-content">
+                <div class="step-header-row">
+                  <h3 class="step-heading">Machine Kneads & Presses</h3>
+                  <span class="step-time-pill">~45 seconds</span>
+                </div>
+                <p class="step-details">
+                  Rotimatic's micro-dosing pump mixes the exact flour-to-water ratio. A spiral robotic blade kneads a fresh dough ball for every single roti before heated plates press it flat.
+                </p>
+                <div class="step-metric">
+                  <span class="metric-label">Force:</span>
+                  <span class="metric-value">400 kg Uniform Pressure</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step-card" id="stepCard3" onclick="jumpToStep(3)">
+              <div class="step-badge-col">
+                <div class="step-number-circle">3</div>
+              </div>
+              <div class="step-content">
+                <div class="step-header-row">
+                  <h3 class="step-heading">Fresh Roti Out in Seconds</h3>
+                  <span class="step-time-pill">Under 90 sec</span>
+                </div>
+                <p class="step-details">
+                  Dual contact heating plates bake both sides evenly. Moisture is vaporized inside the dough, creating that legendary aromatic balloon puff before sliding hot onto your plate.
+                </p>
+                <div class="step-metric">
+                  <span class="metric-label">Result:</span>
+                  <span class="metric-value">100% Puffed, Piping Hot Roti</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. FEATURE HIGHLIGHTS (6 CARDS GRID) -->
+    <section class="features-section" id="features">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-kicker">ENGINEERING EXCELLENCE</div>
+          <h2 class="section-title">Built Without Compromise</h2>
+          <p class="section-subtitle">
+            Every millimeter of Rotimatic NEXT is designed to eliminate kitchen chaos while delivering heirloom-quality softness.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <!-- Card 1 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <circle cx="12" cy="12" r="9"></circle>
+                <circle cx="12" cy="12" r="5" stroke-dasharray="2 2"></circle>
+                <circle cx="12" cy="12" r="1.5" fill="#FF8A00"></circle>
+              </svg>
+            </div>
+            <h3 class="feature-title">Perfect Round Roti Every Time</h3>
+            <p class="feature-description">
+              Rotary laser-guided flattening discs ensure zero edge tearing, uniform circular perfection, and even thickness from rim to center.
+            </p>
+            <div class="feature-tag">360° Circular Geometry</div>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">60+ Rotis Per Hour</h3>
+            <p class="feature-description">
+              High-output continuous baking queue delivers a piping hot, puffed roti every 60 seconds. Easily feeds large family gatherings and festive dinners.
+            </p>
+            <div class="feature-tag">Rapid Heating Core</div>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">No Mess, No Effort</h3>
+            <p class="feature-description">
+              Say goodbye to flour dust on countertops, sticky rolling pins, and standing over smoky tawas. Just press START and let robotics do the rest.
+            </p>
+            <div class="feature-tag">Zero Countertop Mess</div>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            </div>
+            <h3 class="feature-title">Smart Automatic Cooking</h3>
+            <p class="feature-description">
+              AI flour profiling recognizes Aashirvaad, Pilsbury, multigrain, or organic brands, automatically adjusting hydration ratios for maximum softness.
+            </p>
+            <div class="feature-tag">Adaptive AI Calibration</div>
+          </div>
+
+          <!-- Card 5 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <h3 class="feature-title">Easy to Use & Clean</h3>
+            <p class="feature-description">
+              Modular dishwasher-safe kneading chamber and non-stick ceramic baking trays detach in 5 seconds for effortless single-rinse maintenance.
+            </p>
+            <div class="feature-tag">Dishwasher Safe Parts</div>
+          </div>
+
+          <!-- Card 6 -->
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#FF8A00" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                <polyline points="9 12 11 14 15 10"></polyline>
+              </svg>
+            </div>
+            <h3 class="feature-title">100% Safe & Hygienic</h3>
+            <p class="feature-description">
+              Food-grade BPA-free materials, automatic thermal cutoff safeguards, and child-lock safety sensors exceed Indian & international safety standards.
+            </p>
+            <div class="feature-tag">ISI & CE Certified</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. SPECS & PRICING COMPARISON TABLE -->
+    <section class="specs-section" id="specs">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-kicker">DETAILED COMPARISON</div>
+          <h2 class="section-title">Specifications & Models</h2>
+          <p class="section-subtitle">
+            Compare technical capabilities and find the perfect Rotimatic NEXT for your household.
+          </p>
+        </div>
+
+        <div class="specs-table-wrapper">
+          <table class="specs-table" aria-label="Variant Comparison Table">
+            <thead>
+              <tr>
+                <th class="col-spec-feature">Hardware Specification</th>
+                <th class="col-variant-white">
+                  <div class="th-variant-header">
+                    <span class="edition-title">Polar White</span>
+                    <span class="edition-price">₹14,999</span>
+                    <span class="edition-badge">Standard Edition</span>
+                  </div>
+                </th>
+                <th class="col-variant-black featured-col">
+                  <div class="th-variant-header">
+                    <span class="popular-ribbon">Flagship Choice</span>
+                    <span class="edition-title">Onyx Black</span>
+                    <span class="edition-price">₹24,999</span>
+                    <span class="edition-badge gold">Luxury Titanium Edition</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="spec-name">Price & Offer</td>
+                <td class="spec-val"><strong class="price-highlight">₹14,999</strong> <del>₹19,999</del></td>
+                <td class="spec-val featured-col"><strong class="price-highlight orange-text">₹24,999</strong> <del>₹32,999</del></td>
+              </tr>
+              <tr>
+                <td class="spec-name">Guarantee Period</td>
+                <td class="spec-val"><span class="badge-tag">5 Years Comprehensive</span></td>
+                <td class="spec-val featured-col"><span class="badge-tag gold">5 Years VIP Priority At-Home</span></td>
+              </tr>
+              <tr>
+                <td class="spec-name">Roti Output Speed</td>
+                <td class="spec-val">Up to 60 rotis / hour (~90 sec / roti)</td>
+                <td class="spec-val featured-col"><strong>Up to 80 rotis / hour</strong> (~65 sec / roti Turbo)</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Chassis & Finish</td>
+                <td class="spec-val">Matte Polar White Impact Polymer</td>
+                <td class="spec-val featured-col">Brushed Onyx Titanium + Ambient Orange LED</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Display Interface</td>
+                <td class="spec-val">4.3" High-Contrast Touchscreen</td>
+                <td class="spec-val featured-col">5.5" Glass Edge-to-Edge Color OLED</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Dimensions & Weight</td>
+                <td class="spec-val">40 cm (W) x 40 cm (D) x 33 cm (H) | 18 kg</td>
+                <td class="spec-val featured-col">39 cm (W) x 39 cm (D) x 33 cm (H) | 19 kg</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Flour & Water Storage</td>
+                <td class="spec-val">1.5 kg Flour (20 Rotis), 1.2 L Water</td>
+                <td class="spec-val featured-col">2.0 kg Flour (30 Rotis), 1.8 L Water</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Recipe Variety</td>
+                <td class="spec-val">Roti, Puri discs, Paratha dough</td>
+                <td class="spec-val featured-col">Roti, Puri, Paratha, Millet/Jowar & Gluten-Free</td>
+              </tr>
+              <tr>
+                <td class="spec-name">Delivery & Setup</td>
+                <td class="spec-val">Free All-India Express Courier</td>
+                <td class="spec-val featured-col">Free Express + Free Video Onboarding Demo</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="spec-name">Select Option</td>
+                <td class="spec-val">
+                  <button class="btn btn-outline btn-block" onclick="selectAndCheckout('white')">
+                    Buy Polar White (₹14,999)
+                  </button>
+                </td>
+                <td class="spec-val featured-col">
+                  <button class="btn btn-primary btn-block" onclick="selectAndCheckout('black')">
+                    Buy Onyx Black (₹24,999)
+                  </button>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. SOCIAL PROOF & GOOGLE REVIEWS SECTION -->
+    <section class="reviews-section" id="reviews">
+      <div class="container">
+        <div class="section-header text-center">
+          <div class="section-kicker">TRUSTED BY MODERN HOMES</div>
+          <h2 class="section-title">Loved by 4,890+ Families Across India</h2>
+          <p class="section-subtitle">
+            Real stories from working parents, busy professionals, and home chefs who regained 10+ hours every week.
+          </p>
+        </div>
+
+        <!-- Big Google-Style Rating Badge -->
+        <div class="google-rating-card">
+          <div class="google-badge-left">
+            <svg class="google-g-logo" viewBox="0 0 24 24" width="38" height="38">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335"/>
+            </svg>
+            <div class="google-rating-numbers">
+              <span class="rating-score">4.6</span>
+              <div class="stars-row" aria-label="4.6 out of 5 stars">
+                ★★★★★
+              </div>
+            </div>
+          </div>
+
+          <div class="google-badge-divider"></div>
+
+          <div class="google-badge-right">
+            <div class="rating-verdict">EXCELLENT • VERIFIED REVIEWS</div>
+            <div class="rating-subtext">Based on <strong>4,892 verified customer reviews</strong> across India</div>
+            <div class="rating-tags">
+              <span class="rtag">✓ 98% Puffed Roti Rating</span>
+              <span class="rtag">✓ 5-Yr Guarantee Backed</span>
+              <span class="rtag">✓ On-Time Delivery</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 Customer Testimonial Cards -->
+        <div class="testimonials-grid">
+          <!-- Testimonial 1 -->
+          <div class="testimonial-card">
+            <div class="t-header">
+              <div class="avatar-circle">PS</div>
+              <div class="t-meta">
+                <div class="t-name">Pooja Sharma</div>
+                <div class="t-location">Bandra West, Mumbai • Verified Owner</div>
+              </div>
+              <div class="t-rating">★★★★★</div>
+            </div>
+            <p class="t-quote">
+              "As two working IT professionals with an 8-year-old child, dinner was always stressful. Rotimatic NEXT makes rotis that puff up better than what my cook used to make. The White edition looks stunning on our white quartz counter!"
+            </p>
+            <div class="t-footer">
+              <span class="t-verified-badge">✓ Verified Buyer (Polar White)</span>
+              <span class="t-date">2 weeks ago</span>
+            </div>
+          </div>
+
+          <!-- Testimonial 2 -->
+          <div class="testimonial-card featured-review">
+            <div class="t-header">
+              <div class="avatar-circle gold">RK</div>
+              <div class="t-meta">
+                <div class="t-name">Rajiv Khanna</div>
+                <div class="t-location">Indiranagar, Bengaluru • Verified Owner</div>
+              </div>
+              <div class="t-rating">★★★★★</div>
+            </div>
+            <p class="t-quote">
+              "We bought the Onyx Black variant with the orange ambient light and it is a total conversation starter. During our Diwali dinner, it made 45 hot rotis back-to-back without a single hiccup. Worth every single rupee."
+            </p>
+            <div class="t-footer">
+              <span class="t-verified-badge">✓ Verified Buyer (Onyx Black)</span>
+              <span class="t-date">1 month ago</span>
+            </div>
+          </div>
+
+          <!-- Testimonial 3 -->
+          <div class="testimonial-card">
+            <div class="t-header">
+              <div class="avatar-circle">AM</div>
+              <div class="t-meta">
+                <div class="t-name">Ananya & Dr. Manoj Nair</div>
+                <div class="t-location">Greater Kailash, Delhi NCR • Verified Owner</div>
+              </div>
+              <div class="t-rating">★★★★★</div>
+            </div>
+            <p class="t-quote">
+              "The dough kneading and cleanliness blew my mind. Zero flour spilled, no sticky dough hands. The 5-year guarantee gives immense peace of mind. Truly feels like an Apple product built for an Indian kitchen."
+            </p>
+            <div class="t-footer">
+              <span class="t-verified-badge">✓ Verified Buyer (Polar White)</span>
+              <span class="t-date">3 weeks ago</span>
+            </div>
+          </div>
+
+          <!-- Testimonial 4 -->
+          <div class="testimonial-card">
+            <div class="t-header">
+              <div class="avatar-circle">VS</div>
+              <div class="t-meta">
+                <div class="t-name">Vikram Salunkhe</div>
+                <div class="t-location">Kothrud, Pune • Verified Owner</div>
+              </div>
+              <div class="t-rating">★★★★★</div>
+            </div>
+            <p class="t-quote">
+              "Customer service was remarkably responsive over WhatsApp when helping us dial in our local chaki atta settings. Once saved, it’s literally 1-touch automation. Piping hot rotis straight to the thali!"
+            </p>
+            <div class="t-footer">
+              <span class="t-verified-badge">✓ Verified Buyer (Onyx Black)</span>
+              <span class="t-date">Yesterday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BOTTOM CALL TO ACTION STRIP -->
+    <section class="bottom-cta-banner">
+      <div class="container">
+        <div class="bottom-cta-card">
+          <div class="cta-card-content">
+            <span class="cta-pill">LIMITED TIME LAUNCH BUNDLE</span>
+            <h2 class="cta-heading">Ready for Fresh, Automatic Rotis Every Day?</h2>
+            <p class="cta-text">
+              Order today to secure the 5-Year Comprehensive Guarantee, Free Pan-India Delivery, and 50% Advance Booking option.
+            </p>
+            <div class="cta-perks">
+              <span>🛡️ 5-Year Warranty Included</span>
+              <span>🚚 Dispatches in 24 Hours</span>
+              <span>💳 EMI Options Available</span>
+            </div>
+          </div>
+          <div class="cta-card-action">
+            <button class="btn btn-primary btn-xl pulse-shadow" onclick="openCheckoutModal()">
+              Buy Rotimatic NEXT Now →
+            </button>
+            <div class="secure-checkout-hint">
+              <span>🔒 256-bit SSL Secure Checkout</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 9. FOOTER -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Brand & Tagline -->
+        <div class="footer-col brand-col">
+          <a href="#" class="brand-logo footer-logo">
+            <span class="logo-mark">
+              <svg viewBox="0 0 36 36" fill="none" width="24" height="24">
+                <circle cx="18" cy="18" r="16" stroke="#FF8A00" stroke-width="3"/>
+                <circle cx="18" cy="18" r="4" fill="#FF8A00"/>
+              </svg>
+            </span>
+            <span class="brand-name">ROTIMATIC <span class="brand-badge-next">NEXT</span></span>
+          </a>
+          <p class="footer-tagline">
+            The world's premier robotic kitchen companion. Revolutionizing Indian culinary tradition with smart automation, precision heating, and zero-effort fresh rotis.
+          </p>
+          <div class="footer-trust-badge">
+            <span class="trust-icon">🇮🇳</span>
+            <span>100% Genuine • Pan India Service & Support</span>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Navigation</h4>
+          <ul class="footer-links-list">
+            <li><a href="#hero">Overview</a></li>
+            <li><a href="#variants">Polar White Edition</a></li>
+            <li><a href="#variants">Onyx Black Edition</a></li>
+            <li><a href="#howItWorks">How It Works Video</a></li>
+            <li><a href="#specs">Specifications & Compare</a></li>
+            <li><a href="#reviews">Verified Customer Reviews</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Support & Care -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Customer Care</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <span class="label">Helpline:</span>
+              <a href="tel:+9118002008899" class="val">1800-200-8899 (Toll Free)</a>
+            </li>
+            <li>
+              <span class="label">WhatsApp:</span>
+              <a href="https://wa.me/919876543210" class="val orange-link">+91 98765 43210</a>
+            </li>
+            <li>
+              <span class="label">Support Hours:</span>
+              <span class="val">10:00 AM – 7:00 PM IST (Mon - Sat)</span>
+            </li>
+            <li>
+              <span class="label">Email:</span>
+              <a href="mailto:support@rotimatic-next.in" class="val">support@rotimatic-next.in</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Service Center Address & Social -->
+        <div class="footer-col">
+          <h4 class="footer-col-title">Headquarters</h4>
+          <address class="footer-address">
+            Rotimatic Innovation Labs Pvt. Ltd.<br />
+            Level 5, Horizon Tech Towers,<br />
+            Outer Ring Road, Bellandur,<br />
+            Bengaluru, Karnataka — 560103
+          </address>
+          
+          <div class="social-links-row">
+            <a href="#" class="social-icon" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33zM9.75 15.02l-.01-6.55 5.75 3.28-5.74 3.27z"/>
+              </svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Twitter">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <p class="copyright">
+          © 2026 Rotimatic NEXT. All rights reserved. Built for client demonstration.
+        </p>
+        <div class="legal-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Warranty Terms (5-Year)</a>
+          <a href="#">Pan-India Service Centers</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 8. CHECKOUT / BUY NOW MODAL (DUMMY CLIENT DEMO FLOW) -->
+  <div class="modal-backdrop" id="checkoutModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="checkout-modal-container">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-brand-badge">ROTIMATIC NEXT</div>
+          <h2 id="modalTitle" class="modal-title">Complete Your Order</h2>
+        </div>
+        <button class="modal-close-btn" onclick="closeCheckoutModal()" aria-label="Close Checkout">✕</button>
+      </div>
+
+      <!-- Step Indicator Bar -->
+      <div class="checkout-steps-bar" id="checkoutStepsBar">
+        <div class="c-step-item active" id="cStepTab1">
+          <span class="c-step-num">1</span>
+          <span class="c-step-label">Details</span>
+        </div>
+        <div class="c-step-divider"></div>
+        <div class="c-step-item" id="cStepTab2">
+          <span class="c-step-num">2</span>
+          <span class="c-step-label">Payment</span>
+        </div>
+        <div class="c-step-divider"></div>
+        <div class="c-step-item" id="cStepTab3">
+          <span class="c-step-num">3</span>
+          <span class="c-step-label">Confirmation</span>
+        </div>
+      </div>
+
+      <!-- STEP 1: ORDER CONFIGURATION & ADDRESS -->
+      <div class="modal-body-step active" id="checkoutStep1">
+        <div class="checkout-grid">
+          <!-- Left: Order Selection & Configuration -->
+          <div class="checkout-panel-left">
+            <h3 class="panel-heading">1. Select Edition & Quantity</h3>
+            
+            <div class="modal-variant-selector">
+              <label class="modal-radio-card" id="mOptWhite" onclick="setCheckoutVariant('white')">
+                <input type="radio" name="checkoutVariant" value="white" checked />
+                <div class="radio-card-content">
+                  <div class="radio-thumb">
+                    <img src="assets/rotimatic-white.jpg" alt="Polar White" />
+                  </div>
+                  <div class="radio-info">
+                    <strong>Polar White Edition</strong>
+                    <div class="radio-price">₹14,999 <del>₹19,999</del></div>
+                    <span class="radio-badge">5-Yr Guarantee Included</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="modal-radio-card" id="mOptBlack" onclick="setCheckoutVariant('black')">
+                <input type="radio" name="checkoutVariant" value="black" />
+                <div class="radio-card-content">
+                  <div class="radio-thumb">
+                    <img src="assets/rotimatic-black.jpg" alt="Onyx Black" />
+                  </div>
+                  <div class="radio-info">
+                    <strong>Onyx Black Edition</strong>
+                    <div class="radio-price">₹24,999 <del>₹32,999</del></div>
+                    <span class="radio-badge gold">Flagship Titanium Edition</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+
+            <!-- Quantity Counter -->
+            <div class="quantity-row">
+              <span class="qty-label">Quantity:</span>
+              <div class="qty-stepper">
+                <button type="button" class="qty-btn" onclick="updateQuantity(-1)">−</button>
+                <span class="qty-display" id="modalQtyDisplay">1</span>
+                <button type="button" class="qty-btn" onclick="updateQuantity(1)">+</button>
+              </div>
+            </div>
+
+            <!-- Delivery Address Form -->
+            <h3 class="panel-heading mt-4">2. Shipping Address</h3>
+            <form id="shippingForm" onsubmit="event.preventDefault(); goToCheckoutStep(2);">
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custName">Full Name *</label>
+                  <input type="text" id="custName" placeholder="e.g. Rahul Sharma" required value="Rahul Sharma" />
+                </div>
+                <div class="form-group">
+                  <label for="custPhone">Phone Number *</label>
+                  <input type="tel" id="custPhone" placeholder="e.g. 9876543210" required value="9876543210" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="custAddress">Complete Street Address *</label>
+                <input type="text" id="custAddress" placeholder="Flat / House No., Building Name, Street" required value="Flat 402, Lotus Grand, Link Road" />
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custCity">City *</label>
+                  <input type="text" id="custCity" placeholder="e.g. Mumbai" required value="Mumbai" />
+                </div>
+                <div class="form-group">
+                  <label for="custPin">PIN Code *</label>
+                  <input type="text" id="custPin" placeholder="e.g. 400050" required value="400050" />
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Right: Live Order Summary -->
+          <div class="checkout-panel-right">
+            <div class="order-summary-box">
+              <h3 class="summary-title">Order Summary</h3>
+
+              <div class="summary-item-preview">
+                <img id="summaryThumb" src="assets/rotimatic-white.jpg" alt="Selected Variant" />
+                <div class="summary-item-text">
+                  <h4 id="summaryVariantName">Polar White Edition</h4>
+                  <div class="summary-meta">
+                    Qty: <span id="summaryQty">1</span> unit(s)
+                  </div>
+                  <div class="summary-single-price" id="summarySinglePrice">₹14,999 each</div>
+                </div>
+              </div>
+
+              <div class="summary-cost-breakdown">
+                <div class="cost-line">
+                  <span>Subtotal</span>
+                  <span id="costSubtotal">₹14,999</span>
+                </div>
+                <div class="cost-line">
+                  <span>5-Year Comprehensive Warranty</span>
+                  <span class="free-text">FREE (Included)</span>
+                </div>
+                <div class="cost-line">
+                  <span>All-India Express Delivery</span>
+                  <span class="free-text">FREE</span>
+                </div>
+                <div class="cost-line">
+                  <span>GST (18% Included)</span>
+                  <span id="costGst">₹2,288</span>
+                </div>
+                <div class="cost-divider"></div>
+                <div class="cost-line total-line">
+                  <span>Total Amount</span>
+                  <span class="total-amount" id="costTotal">₹14,999</span>
+                </div>
+              </div>
+
+              <div class="summary-perks">
+                <div class="perk-row">🛡️ 5-Year Replacement Warranty</div>
+                <div class="perk-row">🚚 Estimated Delivery: 3–5 Business Days</div>
+                <div class="perk-row">🔒 100% Buyer Protection Guaranteed</div>
+              </div>
+
+              <button type="button" class="btn btn-primary btn-block btn-lg" onclick="goToCheckoutStep(2)">
+                Proceed to Payment →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2: DUMMY PAYMENT FLOW -->
+      <div class="modal-body-step" id="checkoutStep2">
+        <div class="payment-step-container">
+          <div class="demo-client-notice">
+            <span class="notice-icon">⚙️</span>
+            <div class="notice-body">
+              <strong>DEMO CLIENT MODE — NO REAL PAYMENT REQUIRED</strong>
+              <p>
+                Payment gateway is currently mocked for client demonstration. As instructed, clicking "Place Order" will test the complete conversion flow.
+              </p>
+            </div>
+          </div>
+
+          <div class="payment-methods-box">
+            <h3 class="panel-heading">Select Payment Method</h3>
+
+            <!-- Payment Method Tabs -->
+            <div class="payment-tabs-nav">
+              <button class="pay-tab-btn active" id="tabUpi" onclick="switchPayTab('upi')">
+                <span>📱 UPI / QR Code</span>
+              </button>
+              <button class="pay-tab-btn" id="tabCard" onclick="switchPayTab('card')">
+                <span>💳 Cards & NetBanking</span>
+              </button>
+              <button class="pay-tab-btn" id="tabCod" onclick="switchPayTab('cod')">
+                <span>📦 50% Advance / COD</span>
+              </button>
+            </div>
+
+            <!-- Tab 1: UPI Content -->
+            <div class="pay-tab-content active" id="contentUpi">
+              <div class="upi-mock-ui">
+                <div class="upi-apps-row">
+                  <div class="upi-app-badge active">
+                    <span class="app-icon gpay">G</span>
+                    <span>Google Pay</span>
+                  </div>
+                  <div class="upi-app-badge">
+                    <span class="app-icon phonepe">Pe</span>
+                    <span>PhonePe</span>
+                  </div>
+                  <div class="upi-app-badge">
+                    <span class="app-icon paytm">Pay</span>
+                    <span>Paytm</span>
+                  </div>
+                  <div class="upi-app-badge">
+                    <span class="app-icon bhim">B</span>
+                    <span>BHIM UPI</span>
+                  </div>
+                </div>
+
+                <div class="upi-qr-mock">
+                  <div class="qr-placeholder">
+                    <!-- Simulated SVG QR Code -->
+                    <svg viewBox="0 0 120 120" width="100" height="100">
+                      <rect width="120" height="120" fill="#FFFFFF"/>
+                      <rect x="10" y="10" width="30" height="30" fill="#000000"/>
+                      <rect x="15" y="15" width="20" height="20" fill="#FFFFFF"/>
+                      <rect x="20" y="20" width="10" height="10" fill="#000000"/>
+                      <rect x="80" y="10" width="30" height="30" fill="#000000"/>
+                      <rect x="85" y="15" width="20" height="20" fill="#FFFFFF"/>
+                      <rect x="90" y="20" width="10" height="10" fill="#000000"/>
+                      <rect x="10" y="80" width="30" height="30" fill="#000000"/>
+                      <rect x="15" y="85" width="20" height="20" fill="#FFFFFF"/>
+                      <rect x="20" y="90" width="10" height="10" fill="#000000"/>
+                      <rect x="50" y="20" width="15" height="15" fill="#000000"/>
+                      <rect x="50" y="50" width="20" height="20" fill="#FF8A00"/>
+                      <rect x="80" y="60" width="15" height="15" fill="#000000"/>
+                      <rect x="50" y="85" width="15" height="25" fill="#000000"/>
+                      <rect x="80" y="90" width="30" height="20" fill="#000000"/>
+                    </svg>
+                  </div>
+                  <div class="qr-info">
+                    <div class="qr-vpa">UPI ID: <code>rotimatic@hdfcbank</code></div>
+                    <p class="qr-note">Scan with any UPI app to complete payment of <strong class="payTotalDisplay">₹14,999</strong>.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 2: Card Content -->
+            <div class="pay-tab-content" id="contentCard">
+              <div class="card-mock-form">
+                <div class="form-group">
+                  <label>Card Number</label>
+                  <input type="text" placeholder="4532 •••• •••• 8892" value="4532 •••• •••• 8892" readonly />
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label>Expiry Date</label>
+                    <input type="text" placeholder="MM/YY" value="08/28" readonly />
+                  </div>
+                  <div class="form-group">
+                    <label>CVV / CVC</label>
+                    <input type="password" placeholder="•••" value="789" readonly />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Cardholder Name</label>
+                  <input type="text" placeholder="Full name on card" value="Rahul Sharma" readonly />
+                </div>
+              </div>
+            </div>
+
+            <!-- Tab 3: COD / 50% Advance -->
+            <div class="pay-tab-content" id="contentCod">
+              <div class="cod-mock-box">
+                <div class="cod-badge">⚡ 50% ADVANCE BOOKING OPTION</div>
+                <p>
+                  Pay 50% (<span class="payHalfDisplay">₹7,499</span>) today to confirm your booking and reserve factory production queue. Pay the remaining 50% via cash/UPI upon delivery at your doorstep.
+                </p>
+                <div class="cod-feature-points">
+                  <span>✓ 100% Verified Delivery Handover</span>
+                  <span>✓ Doorstep Inspection Allowed</span>
+                  <span>✓ Free Cancellation before dispatch</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Checkout Controls -->
+          <div class="payment-action-buttons">
+            <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(1)">
+              ← Back to Details
+            </button>
+            <button type="button" class="btn btn-primary btn-lg pulse-shadow" id="placeOrderBtn" onclick="processDummyPayment()">
+              <span>Place Order (<span class="payTotalDisplay">₹14,999</span>)</span>
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3: ORDER CONFIRMATION -->
+      <div class="modal-body-step" id="checkoutStep3">
+        <div class="order-confirmation-wrap">
+          <div class="conf-success-icon">
+            <div class="icon-circle">
+              <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#34A853" stroke-width="3">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <h3 class="conf-title">Booking Confirmed!</h3>
+          <p class="conf-subtitle">
+            Thank you, <strong id="confCustomerName">Rahul Sharma</strong>! Your Rotimatic NEXT order has been successfully queued.
+          </p>
+
+          <div class="order-details-ticket">
+            <div class="ticket-row">
+              <span class="ticket-label">Order Reference:</span>
+              <span class="ticket-val" id="confOrderId">#ROTI-2026-9842</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Product Selected:</span>
+              <span class="ticket-val" id="confVariant">Polar White Edition (1 Unit)</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Total Amount:</span>
+              <span class="ticket-val" id="confTotal">₹14,999 (Inclusive of 18% GST)</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Delivery Destination:</span>
+              <span class="ticket-val" id="confDestination">Mumbai, Maharashtra (400050)</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Warranty:</span>
+              <span class="ticket-val orange-text">5-Year Comprehensive Activated</span>
+            </div>
+            <div class="ticket-row">
+              <span class="ticket-label">Estimated Delivery:</span>
+              <span class="ticket-val">3–5 Business Days via Express Courier</span>
+            </div>
+          </div>
+
+          <div class="conf-actions-row">
+            <a
+              id="confWhatsAppBtn"
+              href="https://wa.me/919876543210?text=Hi%2C%20I%20just%20placed%20order%20ROTI-2026-9842"
+              target="_blank"
+              class="btn btn-primary"
+            >
+              <span>Get Order Updates on WhatsApp</span>
+              <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.08L7.81 18.91L4.69 19.73L5.52 16.69L5.33 16.39C4.54 15.13 4.12 13.54 4.12 11.91C4.12 7.37 7.82 3.67 12.05 3.67ZM8.94 7.39C8.76 7.39 8.46 7.46 8.21 7.73C7.96 8 7.25 8.66 7.25 10.03C7.25 11.4 8.25 12.72 8.39 12.91C8.53 13.1 10.32 15.86 13.06 17.04C15.34 18.02 15.8 17.82 16.29 17.78C16.78 17.73 17.88 17.12 18.11 16.48C18.34 15.84 18.34 15.29 18.27 15.18C18.2 15.06 18.02 14.99 17.74 14.85C17.47 14.72 16.1 14.04 15.85 13.95C15.6 13.86 15.41 13.81 15.23 14.09C15.05 14.36 14.52 14.99 14.36 15.18C14.2 15.36 14.04 15.38 13.77 15.25C13.5 15.11 12.61 14.82 11.56 13.89C10.74 13.16 10.19 12.26 10.03 11.98C9.87 11.71 10.01 11.56 10.15 11.42C10.27 11.3 10.42 11.11 10.56 10.95C10.7 10.79 10.74 10.67 10.83 10.49C10.92 10.31 10.88 10.15 10.81 10.01C10.74 9.87 10.21 8.52 9.97 7.99C9.75 7.47 9.52 7.54 9.35 7.53L8.94 7.39Z"/>
+              </svg>
+            </a>
+            <button class="btn btn-secondary" onclick="closeCheckoutModal()">
+              Close Window
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>
