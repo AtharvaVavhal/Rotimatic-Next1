@@ -27,23 +27,25 @@ const appState = {
   variants: {
     black: {
       key: 'black',
-      name: 'Onyx Black Edition',
+      name: 'Rotimatic NEXT (Black Edition)',
+      shortName: 'Black Edition',
       price: 24999,
       originalPrice: 32999,
       savings: 8000,
-      image: 'assets/rotimatic-black-dramatic.jpg',
-      badge: '5 Year Guarantee • Flagship Titanium',
-      summary: 'Onyx Black Edition (1 Unit)'
+      image: 'assets/machine-black-24k.jpg',
+      badge: '5 Year Priority Warranty • Verified Blueprint Specs',
+      summary: 'Rotimatic NEXT Black Edition (1 Unit)'
     },
     white: {
       key: 'white',
-      name: 'Polar White Edition',
+      name: 'Rotimatic Classic White',
+      shortName: 'Classic White',
       price: 14999,
       originalPrice: 19999,
       savings: 5000,
-      image: 'assets/rotimatic-360-01.jpg',
-      badge: '5 Year Guarantee Included',
-      summary: 'Polar White Edition (1 Unit)'
+      image: 'assets/machine-white-14k.jpg',
+      badge: '5 Year Comprehensive Guarantee Included',
+      summary: 'Rotimatic Classic White (1 Unit)'
     }
   },
   // Asset 1 Turnaround Ordered Frames (1 to 7)
@@ -319,23 +321,44 @@ function selectVariant(variantKey, triggerToast = true) {
   const heroDot = document.getElementById('heroVariantDot');
   const heroTitle = document.getElementById('heroVariantTitle');
   const heroPrice = document.getElementById('heroPriceTag');
+  const spotlightFrame = document.querySelector('.spotlight-frame');
+  const spotlightBadgeText = document.getElementById('spotlightBadgeText');
 
   if (heroImg) {
-    heroImg.style.opacity = '0.3';
+    heroImg.style.opacity = '0.2';
     setTimeout(() => {
       heroImg.src = variant.image;
-      heroImg.alt = `Rotimatic NEXT ${variant.name}`;
+      heroImg.alt = `${variant.name} Automatic Roti Maker`;
       heroImg.style.opacity = '1';
     }, 150);
   }
 
+  if (spotlightFrame) {
+    spotlightFrame.classList.toggle('is-white-machine', variantKey === 'white');
+    spotlightFrame.classList.toggle('is-black-machine', variantKey === 'black');
+  }
+
+  if (spotlightBadgeText) {
+    spotlightBadgeText.textContent = variantKey === 'white' 
+      ? 'Rotimatic Classic White (₹14,999)' 
+      : 'Rotimatic NEXT Black Edition (₹24,999)';
+  }
+
+  // Update Stage Machine Switcher Buttons if present
+  const btnStageWhite = document.getElementById('btnStageWhite');
+  const btnStageBlack = document.getElementById('btnStageBlack');
+  if (btnStageWhite && btnStageBlack) {
+    btnStageWhite.classList.toggle('active', variantKey === 'white');
+    btnStageBlack.classList.toggle('active', variantKey === 'black');
+  }
+
   if (heroDot) {
-    heroDot.className = `pill-indicator ${variantKey === 'black' ? 'black' : ''}`;
+    heroDot.className = `pill-indicator ${variantKey === 'black' ? 'black' : 'white'}`;
   }
   if (heroTitle) heroTitle.textContent = variant.name;
   if (heroPrice) heroPrice.textContent = `₹${variant.price.toLocaleString('en-IN')}`;
 
-  // Update Variant cards styling
+  // Update Variant cards styling in #variants section
   const cardWhite = document.getElementById('variantCardWhite');
   const cardBlack = document.getElementById('variantCardBlack');
 
@@ -343,23 +366,31 @@ function selectVariant(variantKey, triggerToast = true) {
     if (variantKey === 'black') {
       cardBlack.classList.add('active');
       cardBlack.setAttribute('aria-pressed', 'true');
-      cardBlack.querySelector('.select-text').textContent = 'Selected (Active)';
-      cardBlack.querySelector('.check-icon').textContent = '✓';
+      const blackBtn = cardBlack.querySelector('.select-text');
+      if (blackBtn) blackBtn.textContent = 'Selected (Active)';
+      const blackIcon = cardBlack.querySelector('.check-icon');
+      if (blackIcon) blackIcon.textContent = '✓';
 
       cardWhite.classList.remove('active');
       cardWhite.setAttribute('aria-pressed', 'false');
-      cardWhite.querySelector('.select-text').textContent = 'Choose Polar White';
-      cardWhite.querySelector('.check-icon').textContent = '→';
+      const whiteBtn = cardWhite.querySelector('.select-text');
+      if (whiteBtn) whiteBtn.textContent = 'Choose Classic White';
+      const whiteIcon = cardWhite.querySelector('.check-icon');
+      if (whiteIcon) whiteIcon.textContent = '→';
     } else {
       cardWhite.classList.add('active');
       cardWhite.setAttribute('aria-pressed', 'true');
-      cardWhite.querySelector('.select-text').textContent = 'Selected (Active)';
-      cardWhite.querySelector('.check-icon').textContent = '✓';
+      const whiteBtn = cardWhite.querySelector('.select-text');
+      if (whiteBtn) whiteBtn.textContent = 'Selected (Active)';
+      const whiteIcon = cardWhite.querySelector('.check-icon');
+      if (whiteIcon) whiteIcon.textContent = '✓';
 
       cardBlack.classList.remove('active');
       cardBlack.setAttribute('aria-pressed', 'false');
-      cardBlack.querySelector('.select-text').textContent = 'Choose Onyx Black';
-      cardBlack.querySelector('.check-icon').textContent = '→';
+      const blackBtn = cardBlack.querySelector('.select-text');
+      if (blackBtn) blackBtn.textContent = 'Choose NEXT Black';
+      const blackIcon = cardBlack.querySelector('.check-icon');
+      if (blackIcon) blackIcon.textContent = '→';
     }
   }
 
@@ -369,16 +400,27 @@ function selectVariant(variantKey, triggerToast = true) {
   if (variantKey === 'white' && radioWhite) radioWhite.checked = true;
   if (variantKey === 'black' && radioBlack) radioBlack.checked = true;
 
+  // Sync Enquiry variant select if modal exists
+  const enquirySelect = document.getElementById('enquiryProductSelect');
+  if (enquirySelect) {
+    enquirySelect.value = variantKey;
+  }
+
   updateCheckoutSummary();
 
   if (triggerToast) {
-    showToast(`Switched to ${variant.name} (₹${variant.price.toLocaleString('en-IN')})`, 'orange');
+    showToast(`Displaying ${variant.name} (₹${variant.price.toLocaleString('en-IN')})`, 'orange');
   }
 }
 
 function selectAndCheckout(variantKey) {
   selectVariant(variantKey, false);
   openCheckoutModal(variantKey);
+}
+
+function selectAndEnquire(variantKey) {
+  selectVariant(variantKey, false);
+  openEnquiryModal(variantKey);
 }
 
 /* ==========================================================================
@@ -631,3 +673,76 @@ function showToast(message, type = '') {
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+/* ==========================================================================
+   9. QUICK ENQUIRY MODAL & CONTACT ACTIONS
+   ========================================================================== */
+function openEnquiryModal(variantKey = null) {
+  if (variantKey && appState.variants[variantKey]) {
+    selectVariant(variantKey, false);
+  }
+
+  const modal = document.getElementById('enquiryModal');
+  if (!modal) return;
+
+  const select = document.getElementById('enquiryProductSelect');
+  if (select) {
+    select.value = appState.currentVariant;
+  }
+
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEnquiryModal() {
+  const modal = document.getElementById('enquiryModal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleEnquiryVariantChange() {
+  const select = document.getElementById('enquiryProductSelect');
+  if (!select) return;
+  selectVariant(select.value, false);
+}
+
+function submitEnquiryForm(e) {
+  if (e) e.preventDefault();
+  const name = (document.getElementById('enqName')?.value || 'Valued Customer').trim();
+  const phone = (document.getElementById('enqPhone')?.value || '').trim();
+  const city = (document.getElementById('enqCity')?.value || '').trim();
+  const productKey = document.getElementById('enquiryProductSelect')?.value || appState.currentVariant;
+  const variant = appState.variants[productKey] || appState.variants.black;
+  const message = (document.getElementById('enqMessage')?.value || '').trim();
+
+  const ticketId = 'ENQ-' + Math.floor(100000 + Math.random() * 900000);
+  
+  closeEnquiryModal();
+  showToast(`✅ Enquiry ${ticketId} received for ${variant.name}! Our representative will call within 2 business hours.`, 'orange');
+}
+
+function sendWhatsAppEnquiry(variantKey = null) {
+  const key = variantKey || appState.currentVariant;
+  const variant = appState.variants[key] || appState.variants.black;
+  const text = encodeURIComponent(
+    `Hello Rotimatic Team, I would like to make an enquiry regarding the ${variant.name} (₹${variant.price.toLocaleString('en-IN')}). Please provide product catalogue, commercial quotation and dispatch timelines.`
+  );
+  window.open(`https://wa.me/919876543210?text=${text}`, '_blank', 'noopener,noreferrer');
+}
+
+function handleGoogleReviewAction() {
+  showToast('⭐ Opening Google Verified Reviews & Ratings...', 'orange');
+  const reviewTarget = document.getElementById('reviews');
+  if (reviewTarget) {
+    reviewTarget.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+// Close enquiry modal on escape or backdrop
+document.addEventListener('click', (e) => {
+  const enqModal = document.getElementById('enquiryModal');
+  if (enqModal && e.target === enqModal) {
+    closeEnquiryModal();
+  }
+});
