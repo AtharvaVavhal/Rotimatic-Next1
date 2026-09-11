@@ -2796,3 +2796,432 @@ button {
     flex-direction: column;
   }
 }
+
+/* ==========================================================================
+   PRODUCTION ASSET INTEGRATIONS & 360 VIEWER STYLES
+   ========================================================================== */
+
+/* Hero Mode Switcher */
+.hero-mode-switcher {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.35rem 0.5rem;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(12px);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  z-index: 10;
+  position: relative;
+}
+
+.mode-pill-btn {
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.mode-pill-btn:hover {
+  color: #ffffff;
+}
+
+.mode-pill-btn.active {
+  background: var(--brand-orange);
+  color: #ffffff;
+  box-shadow: 0 2px 12px rgba(255, 138, 0, 0.4);
+}
+
+/* Hero Spotlight Mode (Asset 2) */
+.hero-view-spotlight {
+  display: none;
+  width: 100%;
+}
+
+.hero-view-spotlight.active {
+  display: block;
+}
+
+.spotlight-frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
+}
+
+.product-render-dramatic {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+.spotlight-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 55px 20px #0a0a0c, inset 0 -25px 45px 12px #0a0a0c;
+  border-radius: var(--radius-xl);
+}
+
+/* Hero 360° Drag Turnaround Mode (Asset 1) */
+.hero-view-360 {
+  display: none;
+  width: 100%;
+}
+
+.hero-view-360.active {
+  display: block;
+}
+
+.viewer-360-container {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.viewer-360-container:active {
+  cursor: grabbing;
+}
+
+.product-render-360 {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: none;
+}
+
+.viewer-360-overlay {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  pointer-events: none;
+}
+
+.viewer-360-prompt {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--brand-orange-light);
+  border: 1px solid var(--border-subtle);
+  width: fit-content;
+}
+
+.prompt-icon {
+  font-size: 1rem;
+}
+
+.angle-label-badge {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  padding: 0.25rem 0.7rem;
+  border-radius: 6px;
+  width: fit-content;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.angle-label-badge strong {
+  color: #ffffff;
+}
+
+.turnaround-dots-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.t-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  transition: all 0.2s ease;
+}
+
+.t-dot.active {
+  width: 24px;
+  border-radius: 999px;
+  background: var(--brand-orange);
+}
+
+/* Featured Dark Box on Variant Card */
+.featured-dark-box {
+  background: #000000 !important;
+}
+
+/* Real Video Player Container */
+.real-video-container {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #000000;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--border-medium);
+}
+
+.native-video-element {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  display: block;
+  background: #000000;
+  object-fit: cover;
+}
+
+.floating-unmute-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  transition: all var(--transition-fast);
+  z-index: 10;
+  cursor: pointer;
+}
+
+.floating-unmute-btn:hover {
+  background: var(--brand-orange);
+  border-color: var(--brand-orange);
+  transform: translateY(-2px);
+}
+
+/* Step Visual Thumbnails (Asset 1 Slices) */
+.step-visual-thumb {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0.75rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.step-visual-thumb img {
+  width: 90px;
+  height: 65px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: #000000;
+  flex-shrink: 0;
+  border: 1px solid var(--border-subtle);
+}
+
+.step-visual-thumb .thumb-desc {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.step-visual-thumb .thumb-desc strong {
+  color: #ffffff;
+}
+
+/* Specs Dimensions Visual Card (Asset 1: rotimatic-360-12.jpg) */
+.specs-dimensions-card {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 2.5rem;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2.75rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.dimensions-image-box {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #000000;
+  border: 1px solid var(--border-subtle);
+}
+
+.dimensions-image-box img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.dim-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--brand-orange);
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.dim-title {
+  font-family: var(--font-display);
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.6rem;
+}
+
+.dim-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+  margin-bottom: 1.5rem;
+}
+
+.dim-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.dim-stat {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface-elevated);
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.dim-stat .stat-num {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--brand-orange-light);
+}
+
+.dim-stat .stat-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Lifestyle Section (Asset 3: rotimatic-lifestyle-kitchen.jpg) */
+.lifestyle-section {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, var(--bg-base) 0%, #121217 50%, var(--bg-base) 100%);
+}
+
+.lifestyle-card {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.lifestyle-image-col {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.lifestyle-image-col img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+.lifestyle-floating-badge {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 1.25rem;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(12px);
+  padding: 0.4rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #ffffff;
+  border: 1px solid var(--border-subtle);
+}
+
+.lifestyle-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.lifestyle-body {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+}
+
+.lifestyle-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.l-feat-item {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.l-check {
+  color: var(--brand-orange);
+  font-weight: 800;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.l-feat-item strong {
+  color: #ffffff;
+}
+
+@media (max-width: 1024px) {
+  .specs-dimensions-card {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .lifestyle-card {
+    grid-template-columns: 1fr;
+  }
+}

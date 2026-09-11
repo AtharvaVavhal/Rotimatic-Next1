@@ -67,6 +67,7 @@
         <a href="#howItWorks" class="nav-link">How It Works</a>
         <a href="#features" class="nav-link">Features</a>
         <a href="#specs" class="nav-link">Specs & Pricing</a>
+        <a href="#lifestyle" class="nav-link">Real Kitchens</a>
         <a href="#reviews" class="nav-link">Reviews</a>
       </div>
 
@@ -92,7 +93,7 @@
   </header>
 
   <main>
-    <!-- 1. HERO SECTION -->
+    <!-- 1. HERO SECTION WITH DRAMATIC SPOTLIGHT & 360° DRAG-TO-ROTATE VIEWER -->
     <section class="hero-section" id="hero">
       <div class="hero-bg-lights">
         <div class="studio-spotlight"></div>
@@ -116,12 +117,12 @@
 
           <!-- Current Active Selection Pill -->
           <div class="hero-selection-pill">
-            <span class="pill-indicator" id="heroVariantDot"></span>
-            <span class="pill-title">Selected:</span>
-            <strong id="heroVariantTitle">Polar White Edition</strong>
+            <span class="pill-indicator black" id="heroVariantDot"></span>
+            <span class="pill-title">Featured:</span>
+            <strong id="heroVariantTitle">Onyx Black Edition</strong>
             <span class="pill-divider">|</span>
-            <span class="pill-price" id="heroPriceTag">₹14,999</span>
-            <span class="pill-savings">Save ₹5,000</span>
+            <span class="pill-price" id="heroPriceTag">₹24,999</span>
+            <span class="pill-savings">Save ₹8,000</span>
           </div>
 
           <div class="hero-cta-group">
@@ -138,7 +139,7 @@
                   <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
               </span>
-              <span>Watch How It Works</span>
+              <span>Watch Real Video Demo</span>
             </a>
           </div>
 
@@ -166,32 +167,72 @@
           </div>
         </div>
 
-        <!-- 3D INTERACTIVE PRODUCT STAGE -->
+        <!-- 3D & 360° INTERACTIVE PRODUCT STAGE -->
         <div class="hero-3d-stage" id="hero3DStage">
-          <div class="stage-lighting-reflect"></div>
-          <div class="product-3d-card" id="product3DCard">
-            <!-- Glass glare overlay for 3D tilt -->
-            <div class="glare-layer" id="glareLayer"></div>
+          <!-- View Mode Switcher Pill -->
+          <div class="hero-mode-switcher">
+            <button class="mode-pill-btn active" id="btnModeSpotlight" onclick="setHeroViewMode('spotlight')">
+              <span>✨ Studio Spotlight</span>
+            </button>
+            <button class="mode-pill-btn" id="btnMode360" onclick="setHeroViewMode('360')">
+              <span>🔄 360° Drag Turnaround</span>
+            </button>
+          </div>
 
-            <!-- Product Render Containers -->
-            <div class="product-image-wrap">
-              <img
-                id="heroProductImage"
-                src="assets/rotimatic-white.jpg"
-                alt="Rotimatic NEXT Automatic Roti Maker 3D Render"
-                class="product-render active"
-              />
-              <div class="product-badge-float">
-                <span class="live-tag">3D Interactive</span>
-                <span class="badge-text">Move mouse to tilt</span>
+          <div class="product-3d-card" id="product3DCard">
+            <!-- MODE A: DRAMATIC SPOTLIGHT VIEW (Asset 2: rotimatic-black-dramatic.jpg) -->
+            <div class="hero-view-spotlight active" id="viewSpotlight">
+              <div class="spotlight-frame">
+                <img
+                  id="heroProductImage"
+                  src="assets/rotimatic-black-dramatic.jpg"
+                  alt="Rotimatic NEXT Automatic Roti Maker Dramatic Black Spotlight Render"
+                  class="product-render-dramatic"
+                />
+                <!-- Subtle Edge Vignette Fade -->
+                <div class="spotlight-vignette-overlay"></div>
+                
+                <div class="product-badge-float">
+                  <span class="live-tag">Hero Showcase</span>
+                  <span class="badge-text">Front-Right 45° Angle</span>
+                </div>
               </div>
             </div>
 
-            <!-- Warm steam animation element -->
-            <div class="steam-emitter">
-              <span class="steam-puff p1"></span>
-              <span class="steam-puff p2"></span>
-              <span class="steam-puff p3"></span>
+            <!-- MODE B: REAL DRAG-TO-ROTATE 360° TURNAROUND (Asset 1: 12-panel slice) -->
+            <div class="hero-view-360" id="view360">
+              <div class="viewer-360-container" id="viewer360Container">
+                <img
+                  id="turnaroundImg"
+                  src="assets/rotimatic-360-01.jpg"
+                  alt="Rotimatic NEXT 360 Degree Turnaround View"
+                  class="product-render-360"
+                  draggable="false"
+                />
+
+                <div class="viewer-360-overlay">
+                  <div class="viewer-360-prompt">
+                    <span class="prompt-icon">⇄</span>
+                    <span id="viewerPromptText">Drag left or right to rotate 360°</span>
+                  </div>
+
+                  <!-- Angle Label Badge -->
+                  <div class="angle-label-badge" id="angleLabelBadge">
+                    Angle: <strong id="angleNameText">Front (0°)</strong>
+                  </div>
+
+                  <!-- 360 Progress Dots -->
+                  <div class="turnaround-dots-row">
+                    <span class="t-dot active" data-frame="1"></span>
+                    <span class="t-dot" data-frame="2"></span>
+                    <span class="t-dot" data-frame="3"></span>
+                    <span class="t-dot" data-frame="4"></span>
+                    <span class="t-dot" data-frame="5"></span>
+                    <span class="t-dot" data-frame="6"></span>
+                    <span class="t-dot" data-frame="7"></span>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Pedestal shadow -->
@@ -223,12 +264,12 @@
         <div class="variants-grid">
           <!-- Variant 1: Polar White -->
           <div
-            class="variant-card active"
+            class="variant-card"
             id="variantCardWhite"
             onclick="selectVariant('white')"
             tabindex="0"
             role="button"
-            aria-pressed="true"
+            aria-pressed="false"
           >
             <div class="variant-top-bar">
               <span class="variant-tag popular">Most Popular</span>
@@ -241,7 +282,7 @@
             </div>
 
             <div class="variant-image-box">
-              <img src="assets/rotimatic-white.jpg" alt="Rotimatic NEXT Polar White Edition" loading="lazy" />
+              <img src="assets/rotimatic-360-01.jpg" alt="Rotimatic NEXT Polar White Edition Front View" loading="lazy" />
             </div>
 
             <div class="variant-info">
@@ -267,20 +308,20 @@
               </div>
 
               <button class="btn btn-variant-select select-white-btn" type="button">
-                <span class="select-text">Selected (Active)</span>
-                <span class="check-icon">✓</span>
+                <span class="select-text">Choose Polar White</span>
+                <span class="check-icon">→</span>
               </button>
             </div>
           </div>
 
-          <!-- Variant 2: Onyx Black -->
+          <!-- Variant 2: Onyx Black (Asset 2 Featured Shot) -->
           <div
-            class="variant-card"
+            class="variant-card active"
             id="variantCardBlack"
             onclick="selectVariant('black')"
             tabindex="0"
             role="button"
-            aria-pressed="false"
+            aria-pressed="true"
           >
             <div class="variant-top-bar">
               <span class="variant-tag flagship">Flagship Edition</span>
@@ -292,8 +333,8 @@
               </span>
             </div>
 
-            <div class="variant-image-box">
-              <img src="assets/rotimatic-black.jpg" alt="Rotimatic NEXT Luxury Onyx Black Edition" loading="lazy" />
+            <div class="variant-image-box featured-dark-box">
+              <img src="assets/rotimatic-black-dramatic.jpg" alt="Rotimatic NEXT Luxury Onyx Black Edition Featured Shot" loading="lazy" />
             </div>
 
             <div class="variant-info">
@@ -319,8 +360,8 @@
               </div>
 
               <button class="btn btn-variant-select select-black-btn" type="button">
-                <span class="select-text">Choose Onyx Black</span>
-                <span class="check-icon">→</span>
+                <span class="select-text">Selected (Active)</span>
+                <span class="check-icon">✓</span>
               </button>
             </div>
           </div>
@@ -328,7 +369,7 @@
       </div>
     </section>
 
-    <!-- 3. "HOW IT WORKS" VIDEO & PROCESS SECTION -->
+    <!-- 3. "HOW IT WORKS" REAL VIDEO SECTION & 3-STEP EXPLAINER -->
     <section class="how-it-works-section" id="howItWorks">
       <div class="container">
         <div class="section-header text-center">
@@ -340,60 +381,40 @@
         </div>
 
         <div class="how-it-works-layout">
-          <!-- Interactive Video Simulation Player -->
+          <!-- Real Video Player Container with Poster Frame = Asset 1 (Door open) -->
           <div class="video-player-wrapper">
-            <div class="video-frame" id="videoFrame">
-              <img
-                src="assets/roti-demo.jpg"
-                alt="Rotimatic NEXT internal baking chamber pressing and puffing fresh roti"
-                class="video-poster-img"
-                id="videoPoster"
-              />
+            <div class="real-video-container" id="realVideoContainer">
+              <video
+                id="howItWorksVideo"
+                class="native-video-element"
+                poster="assets/rotimatic-360-10.jpg"
+                controls
+                muted
+                loop
+                playsinline
+                preload="metadata"
+              >
+                <source src="assets/roti-demo.mp4" type="video/mp4" />
+                Your browser does not support HTML5 video.
+              </video>
 
-              <!-- Simulated Live HUD Overlay -->
-              <div class="video-hud-overlay">
-                <div class="hud-top">
-                  <div class="hud-live-tag">
-                    <span class="rec-dot"></span>
-                    <span>INTERNAL CHAMBER TELEMETRY</span>
-                  </div>
-                  <div class="hud-temp" id="hudTemp">CHAMBER: 235°C</div>
-                </div>
-
-                <!-- Center Play / Replay Button -->
-                <button class="btn-play-video" id="playVideoBtn" aria-label="Play Live Demonstration" onclick="togglePlaySimulation()">
-                  <div class="play-pulse-ring"></div>
-                  <svg id="playIconSvg" viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
-                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                  </svg>
-                </button>
-
-                <!-- Dynamic Step Caption on Video -->
-                <div class="hud-step-caption" id="hudStepCaption">
-                  <span class="badge-step-number" id="hudStepNumber">STEP 2</span>
-                  <span class="hud-step-text" id="hudStepText">Twin Calibrated Discs Compressing Dough Ball</span>
-                </div>
-
-                <!-- Video timeline bar -->
-                <div class="video-timeline-bar" onclick="scrubTimeline(event)">
-                  <div class="timeline-fill" id="timelineFill"></div>
-                  <div class="timeline-time">
-                    <span id="timeElapsed">0:45</span> / <span id="timeDuration">1:30</span>
-                  </div>
-                </div>
-              </div>
+              <!-- Floating Unmute Audio Pill -->
+              <button class="floating-unmute-btn" id="unmuteVideoBtn" onclick="toggleVideoSound()">
+                <span id="unmuteIcon">🔊</span>
+                <span id="unmuteText">Click for Sound</span>
+              </button>
             </div>
 
             <div class="video-caption-foot">
               <span class="icon">ℹ️</span>
-              <span>Ultra-slow-motion capture inside the high-temp non-stick 360° baking disc.</span>
+              <span>Poster shows internal chamber & door mechanism (Asset 1: 3/4 Door Open). Live footage loops automatically on scroll.</span>
             </div>
           </div>
 
-          <!-- 3-Step Visual Explainer Progression -->
+          <!-- 3-Step Visual Explainer Progression with Asset 1 Turnaround Frames -->
           <div class="steps-progression-list">
-            <!-- Step 1 -->
-            <div class="step-card active" id="stepCard1" onclick="jumpToStep(1)">
+            <!-- Step 1: Add Flour, Water & Oil (with Asset 1: 3/4 Door Open) -->
+            <div class="step-card active" id="stepCard1">
               <div class="step-badge-col">
                 <div class="step-number-circle">1</div>
                 <div class="step-connector-line"></div>
@@ -406,15 +427,17 @@
                 <p class="step-details">
                   Load your preferred whole wheat, multigrain, or gluten-free flour into the separate top airtight canisters. Add water and oil once — enough for 20+ rotis per fill.
                 </p>
-                <div class="step-metric">
-                  <span class="metric-label">Sensors:</span>
-                  <span class="metric-value">Optical Flour Density Check</span>
+                <div class="step-visual-thumb">
+                  <img src="assets/rotimatic-360-10.jpg" alt="Rotimatic NEXT 3/4 Perspective Door Open Internal Chamber" />
+                  <div class="thumb-desc">
+                    <strong>3/4 Perspective (Door Open):</strong> Optical sensors verify ingredient density before releasing into the micro-mixing chamber.
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Step 2 -->
-            <div class="step-card" id="stepCard2" onclick="jumpToStep(2)">
+            <!-- Step 2: Machine Kneads & Presses (with Asset 1: 3/4 Top Open Canisters) -->
+            <div class="step-card" id="stepCard2">
               <div class="step-badge-col">
                 <div class="step-number-circle">2</div>
                 <div class="step-connector-line"></div>
@@ -427,15 +450,17 @@
                 <p class="step-details">
                   Rotimatic's micro-dosing pump mixes the exact flour-to-water ratio. A spiral robotic blade kneads a fresh dough ball for every single roti before heated plates press it flat.
                 </p>
-                <div class="step-metric">
-                  <span class="metric-label">Force:</span>
-                  <span class="metric-value">400 kg Uniform Pressure</span>
+                <div class="step-visual-thumb">
+                  <img src="assets/rotimatic-360-11.jpg" alt="Rotimatic NEXT 3/4 Perspective Top Open Airtight Canisters" />
+                  <div class="thumb-desc">
+                    <strong>3/4 Perspective (Top Open):</strong> Triple sealed canisters with silicone gaskets preserve freshness for weeks.
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- Step 3 -->
-            <div class="step-card" id="stepCard3" onclick="jumpToStep(3)">
+            <!-- Step 3: Fresh Roti Out in Seconds -->
+            <div class="step-card" id="stepCard3">
               <div class="step-badge-col">
                 <div class="step-number-circle">3</div>
               </div>
@@ -563,15 +588,43 @@
       </div>
     </section>
 
-    <!-- 5. SPECS & PRICING COMPARISON TABLE -->
+    <!-- 5. SPECS & PRICING COMPARISON TABLE WITH SIZE REFERENCE VISUAL -->
     <section class="specs-section" id="specs">
       <div class="container">
         <div class="section-header text-center">
-          <div class="section-kicker">DETAILED COMPARISON</div>
-          <h2 class="section-title">Specifications & Models</h2>
+          <div class="section-kicker">DETAILED COMPARISON & DIMENSIONS</div>
+          <h2 class="section-title">Specifications & Dimensions</h2>
           <p class="section-subtitle">
-            Compare technical capabilities and find the perfect Rotimatic NEXT for your household.
+            Compare technical capabilities, model variations, and kitchen countertop footprints.
           </p>
+        </div>
+
+        <!-- Dimensions Visual Card (Asset 1: rotimatic-360-12.jpg) -->
+        <div class="specs-dimensions-card">
+          <div class="dimensions-image-box">
+            <img src="assets/rotimatic-360-12.jpg" alt="Rotimatic NEXT Official Size Reference (37 cm W x 28 cm D x 46.5 cm H)" />
+          </div>
+          <div class="dimensions-content">
+            <span class="dim-badge">OFFICIAL PHYSICAL BLUEPRINT</span>
+            <h3 class="dim-title">Compact Countertop Footprint</h3>
+            <p class="dim-desc">
+              Engineered to fit beneath standard kitchen wall cabinets with ample clearance for ingredient refilling.
+            </p>
+            <div class="dim-stats-grid">
+              <div class="dim-stat">
+                <span class="stat-num">37 cm</span>
+                <span class="stat-label">Width (Front Face)</span>
+              </div>
+              <div class="dim-stat">
+                <span class="stat-num">28 cm</span>
+                <span class="stat-label">Depth (Countertop)</span>
+              </div>
+              <div class="dim-stat">
+                <span class="stat-num">46.5 cm</span>
+                <span class="stat-label">Height (With Canisters)</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="specs-table-wrapper">
@@ -624,8 +677,8 @@
               </tr>
               <tr>
                 <td class="spec-name">Dimensions & Weight</td>
-                <td class="spec-val">40 cm (W) x 40 cm (D) x 33 cm (H) | 18 kg</td>
-                <td class="spec-val featured-col">39 cm (W) x 39 cm (D) x 33 cm (H) | 19 kg</td>
+                <td class="spec-val">37 cm (W) x 28 cm (D) x 46.5 cm (H) | 18 kg</td>
+                <td class="spec-val featured-col">37 cm (W) x 28 cm (D) x 46.5 cm (H) | 19 kg</td>
               </tr>
               <tr>
                 <td class="spec-name">Flour & Water Storage</td>
@@ -659,6 +712,47 @@
               </tr>
             </tfoot>
           </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: "IN REAL INDIAN KITCHENS" LIFESTYLE AMBIENCE (Asset 3) -->
+    <section class="lifestyle-section" id="lifestyle">
+      <div class="container">
+        <div class="lifestyle-card">
+          <div class="lifestyle-image-col">
+            <img src="assets/rotimatic-lifestyle-kitchen.jpg" alt="Rotimatic in Real Indian Kitchen Countertop Setup" loading="lazy" />
+            <div class="lifestyle-floating-badge">
+              <span>🏡 Real Home Environment</span>
+            </div>
+          </div>
+          <div class="lifestyle-text-col">
+            <span class="section-kicker">EVERYDAY PRACTICALITY</span>
+            <h2 class="lifestyle-heading">In Real Indian Kitchens</h2>
+            <p class="lifestyle-body">
+              Beyond studio lights and 3D specifications, Rotimatic is built for the rhythm of Indian family life. Placed right on the countertop, it turns morning breakfasts, school tiffins, and spontaneous dinner parties into calm, hands-free moments.
+            </p>
+            <div class="lifestyle-features-list">
+              <div class="l-feat-item">
+                <span class="l-check">✓</span>
+                <div>
+                  <strong>Effortless Daily Routine:</strong> Put flour, water, and oil in the morning; have hot rotis ready on demand.
+                </div>
+              </div>
+              <div class="l-feat-item">
+                <span class="l-check">✓</span>
+                <div>
+                  <strong>Zero Countertop Clutter:</strong> Completely sealed internal mixing keeps kitchen surfaces spotlessly clean.
+                </div>
+              </div>
+              <div class="l-feat-item">
+                <span class="l-check">✓</span>
+                <div>
+                  <strong>Designed for Indian Spaces:</strong> Fits beside standard mixers and microwaves with easy top refilling.
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -846,7 +940,8 @@
             <li><a href="#variants">Polar White Edition</a></li>
             <li><a href="#variants">Onyx Black Edition</a></li>
             <li><a href="#howItWorks">How It Works Video</a></li>
-            <li><a href="#specs">Specifications & Compare</a></li>
+            <li><a href="#specs">Specifications & Dimensions</a></li>
+            <li><a href="#lifestyle">In Real Kitchens</a></li>
             <li><a href="#reviews">Verified Customer Reviews</a></li>
           </ul>
         </div>
@@ -962,30 +1057,30 @@
             <h3 class="panel-heading">1. Select Edition & Quantity</h3>
             
             <div class="modal-variant-selector">
-              <label class="modal-radio-card" id="mOptWhite" onclick="setCheckoutVariant('white')">
-                <input type="radio" name="checkoutVariant" value="white" checked />
-                <div class="radio-card-content">
-                  <div class="radio-thumb">
-                    <img src="assets/rotimatic-white.jpg" alt="Polar White" />
-                  </div>
-                  <div class="radio-info">
-                    <strong>Polar White Edition</strong>
-                    <div class="radio-price">₹14,999 <del>₹19,999</del></div>
-                    <span class="radio-badge">5-Yr Guarantee Included</span>
-                  </div>
-                </div>
-              </label>
-
               <label class="modal-radio-card" id="mOptBlack" onclick="setCheckoutVariant('black')">
-                <input type="radio" name="checkoutVariant" value="black" />
+                <input type="radio" name="checkoutVariant" value="black" checked />
                 <div class="radio-card-content">
                   <div class="radio-thumb">
-                    <img src="assets/rotimatic-black.jpg" alt="Onyx Black" />
+                    <img src="assets/rotimatic-black-dramatic.jpg" alt="Onyx Black Featured" />
                   </div>
                   <div class="radio-info">
                     <strong>Onyx Black Edition</strong>
                     <div class="radio-price">₹24,999 <del>₹32,999</del></div>
                     <span class="radio-badge gold">Flagship Titanium Edition</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="modal-radio-card" id="mOptWhite" onclick="setCheckoutVariant('white')">
+                <input type="radio" name="checkoutVariant" value="white" />
+                <div class="radio-card-content">
+                  <div class="radio-thumb">
+                    <img src="assets/rotimatic-360-01.jpg" alt="Polar White" />
+                  </div>
+                  <div class="radio-info">
+                    <strong>Polar White Edition</strong>
+                    <div class="radio-price">₹14,999 <del>₹19,999</del></div>
+                    <span class="radio-badge">5-Yr Guarantee Included</span>
                   </div>
                 </div>
               </label>
@@ -1039,20 +1134,20 @@
               <h3 class="summary-title">Order Summary</h3>
 
               <div class="summary-item-preview">
-                <img id="summaryThumb" src="assets/rotimatic-white.jpg" alt="Selected Variant" />
+                <img id="summaryThumb" src="assets/rotimatic-black-dramatic.jpg" alt="Selected Variant" />
                 <div class="summary-item-text">
-                  <h4 id="summaryVariantName">Polar White Edition</h4>
+                  <h4 id="summaryVariantName">Onyx Black Edition</h4>
                   <div class="summary-meta">
                     Qty: <span id="summaryQty">1</span> unit(s)
                   </div>
-                  <div class="summary-single-price" id="summarySinglePrice">₹14,999 each</div>
+                  <div class="summary-single-price" id="summarySinglePrice">₹24,999 each</div>
                 </div>
               </div>
 
               <div class="summary-cost-breakdown">
                 <div class="cost-line">
                   <span>Subtotal</span>
-                  <span id="costSubtotal">₹14,999</span>
+                  <span id="costSubtotal">₹24,999</span>
                 </div>
                 <div class="cost-line">
                   <span>5-Year Comprehensive Warranty</span>
@@ -1064,12 +1159,12 @@
                 </div>
                 <div class="cost-line">
                   <span>GST (18% Included)</span>
-                  <span id="costGst">₹2,288</span>
+                  <span id="costGst">₹3,813</span>
                 </div>
                 <div class="cost-divider"></div>
                 <div class="cost-line total-line">
                   <span>Total Amount</span>
-                  <span class="total-amount" id="costTotal">₹14,999</span>
+                  <span class="total-amount" id="costTotal">₹24,999</span>
                 </div>
               </div>
 
@@ -1161,7 +1256,7 @@
                   </div>
                   <div class="qr-info">
                     <div class="qr-vpa">UPI ID: <code>rotimatic@hdfcbank</code></div>
-                    <p class="qr-note">Scan with any UPI app to complete payment of <strong class="payTotalDisplay">₹14,999</strong>.</p>
+                    <p class="qr-note">Scan with any UPI app to complete payment of <strong class="payTotalDisplay">₹24,999</strong>.</p>
                   </div>
                 </div>
               </div>
@@ -1196,7 +1291,7 @@
               <div class="cod-mock-box">
                 <div class="cod-badge">⚡ 50% ADVANCE BOOKING OPTION</div>
                 <p>
-                  Pay 50% (<span class="payHalfDisplay">₹7,499</span>) today to confirm your booking and reserve factory production queue. Pay the remaining 50% via cash/UPI upon delivery at your doorstep.
+                  Pay 50% (<span class="payHalfDisplay">₹12,499</span>) today to confirm your booking and reserve factory production queue. Pay the remaining 50% via cash/UPI upon delivery at your doorstep.
                 </p>
                 <div class="cod-feature-points">
                   <span>✓ 100% Verified Delivery Handover</span>
@@ -1213,7 +1308,7 @@
               ← Back to Details
             </button>
             <button type="button" class="btn btn-primary btn-lg pulse-shadow" id="placeOrderBtn" onclick="processDummyPayment()">
-              <span>Place Order (<span class="payTotalDisplay">₹14,999</span>)</span>
+              <span>Place Order (<span class="payTotalDisplay">₹24,999</span>)</span>
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
@@ -1245,11 +1340,11 @@
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Product Selected:</span>
-              <span class="ticket-val" id="confVariant">Polar White Edition (1 Unit)</span>
+              <span class="ticket-val" id="confVariant">Onyx Black Edition (1 Unit)</span>
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Total Amount:</span>
-              <span class="ticket-val" id="confTotal">₹14,999 (Inclusive of 18% GST)</span>
+              <span class="ticket-val" id="confTotal">₹24,999 (Inclusive of 18% GST)</span>
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Delivery Destination:</span>
@@ -1275,13 +1370,12 @@
               <span>Get Order Updates on WhatsApp</span>
               <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
                 <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.08L7.81 18.91L4.69 19.73L5.52 16.69L5.33 16.39C4.54 15.13 4.12 13.54 4.12 11.91C4.12 7.37 7.82 3.67 12.05 3.67ZM8.94 7.39C8.76 7.39 8.46 7.46 8.21 7.73C7.96 8 7.25 8.66 7.25 10.03C7.25 11.4 8.25 12.72 8.39 12.91C8.53 13.1 10.32 15.86 13.06 17.04C15.34 18.02 15.8 17.82 16.29 17.78C16.78 17.73 17.88 17.12 18.11 16.48C18.34 15.84 18.34 15.29 18.27 15.18C18.2 15.06 18.02 14.99 17.74 14.85C17.47 14.72 16.1 14.04 15.85 13.95C15.6 13.86 15.41 13.81 15.23 14.09C15.05 14.36 14.52 14.99 14.36 15.18C14.2 15.36 14.04 15.38 13.77 15.25C13.5 15.11 12.61 14.82 11.56 13.89C10.74 13.16 10.19 12.26 10.03 11.98C9.87 11.71 10.01 11.56 10.15 11.42C10.27 11.3 10.42 11.11 10.56 10.95C10.7 10.79 10.74 10.67 10.83 10.49C10.92 10.31 10.88 10.15 10.81 10.01C10.74 9.87 10.21 8.52 9.97 7.99C9.75 7.47 9.52 7.54 9.35 7.53L8.94 7.39Z"/>
-              </svg>
-            </a>
-            <button class="btn btn-secondary" onclick="closeCheckoutModal()">
-              Close Window
-            </button>
-          </div>
-        </div>
+          </svg>
+          <span>Get Order Updates on WhatsApp</span>
+        </a>
+        <button class="btn btn-secondary" onclick="closeCheckoutModal()">
+          Close Window
+        </button>
       </div>
     </div>
   </div>

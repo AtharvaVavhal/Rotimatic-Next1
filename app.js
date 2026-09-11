@@ -1,19 +1,21 @@
 /**
  * ROTIMATIC NEXT — Interactive Application Logic
- * Features:
- *  1. 3D Mouse Parallax & Gyro Tilt on Hero Product Render
- *  2. Interactive Variant Switcher (Polar White ₹14,999 vs Onyx Black ₹24,999)
- *  3. "How It Works" Live Process Video & Telemetry Simulation
- *  4. Specs Matrix Selectors & Instant Add to Cart
- *  5. Complete Dummy Checkout / Buy Now Modal (Client Demo Mock)
- *     NOTE: Payment gateway is mocked.
- *     TODO: integrate real payment gateway once client provides merchant account (Razorpay/PayU/Stripe)
+ * Production Asset Integration:
+ *  1. Asset 1: Real Drag-to-Rotate 360° Turnaround Viewer (7 ordered frames: Front -> Right -> Back -> Left -> Front)
+ *  2. Asset 2: Dramatic Black Spotlight Showcase with Vignette Edge Blend
+ *  3. Asset 3: "In Real Indian Kitchens" Lifestyle Showcase
+ *  4. Real HTML5 Video Player with Scroll-into-view Autoplay & Floating Unmute Pill
+ *  5. Interactive Variant Switcher (Polar White ₹14,999 vs Onyx Black ₹24,999)
+ *  6. Complete Dummy Checkout / Buy Now Modal (Client Demo Mock)
+ *     // TODO: integrate real payment gateway once client provides merchant account (Razorpay/PayU/Stripe)
  */
 
 // Global State
 const appState = {
-  currentVariant: 'white',
+  currentVariant: 'black',
+  heroMode: 'spotlight', // 'spotlight' | '360'
   quantity: 1,
+  current360Frame: 1,
   customer: {
     name: 'Rahul Sharma',
     phone: '9876543210',
@@ -23,63 +25,216 @@ const appState = {
   },
   selectedPaymentMethod: 'upi',
   variants: {
-    white: {
-      key: 'white',
-      name: 'Polar White Edition',
-      price: 14999,
-      originalPrice: 19999,
-      savings: 5000,
-      image: 'assets/rotimatic-white.jpg',
-      badge: '5 Year Guarantee Included',
-      summary: 'Polar White Edition (1 Unit)'
-    },
     black: {
       key: 'black',
       name: 'Onyx Black Edition',
       price: 24999,
       originalPrice: 32999,
       savings: 8000,
-      image: 'assets/rotimatic-black.jpg',
+      image: 'assets/rotimatic-black-dramatic.jpg',
       badge: '5 Year Guarantee • Flagship Titanium',
       summary: 'Onyx Black Edition (1 Unit)'
+    },
+    white: {
+      key: 'white',
+      name: 'Polar White Edition',
+      price: 14999,
+      originalPrice: 19999,
+      savings: 5000,
+      image: 'assets/rotimatic-360-01.jpg',
+      badge: '5 Year Guarantee Included',
+      summary: 'Polar White Edition (1 Unit)'
     }
-  }
+  },
+  // Asset 1 Turnaround Ordered Frames (1 to 7)
+  turnaroundFrames: [
+    { frame: 1, src: 'assets/rotimatic-360-01.jpg', label: 'Front (0°)' },
+    { frame: 2, src: 'assets/rotimatic-360-02.jpg', label: 'Front-Right 45°' },
+    { frame: 3, src: 'assets/rotimatic-360-03.jpg', label: 'Right Side (90°)' },
+    { frame: 4, src: 'assets/rotimatic-360-04.jpg', label: 'Back-Right (135°)' },
+    { frame: 5, src: 'assets/rotimatic-360-05.jpg', label: 'Back (180°)' },
+    { frame: 6, src: 'assets/rotimatic-360-06.jpg', label: 'Back-Left (225°)' },
+    { frame: 7, src: 'assets/rotimatic-360-07.jpg', label: 'Left Side (270°)' }
+  ]
 };
 
 // DOM Content Loaded Initializer
 document.addEventListener('DOMContentLoaded', () => {
+  preload360Images();
   init3DHeroTilt();
-  initVariantSelection();
-  initVideoSimulation();
+  init360Viewer();
+  initVideoPlayer();
   initNavigationScroll();
   initMobileMenu();
   updateCheckoutSummary();
 });
 
 /* ==========================================================================
-   1. 3D HERO PRODUCT TILT & PARALLAX EFFECT
+   1. PRELOAD 360° TURNAROUND IMAGES
+   ========================================================================== */
+const preloadedImages = [];
+function preload360Images() {
+  appState.turnaroundFrames.forEach(item => {
+    const img = new Image();
+    img.src = item.src;
+    preloadedImages.push(img);
+  });
+}
+
+/* ==========================================================================
+   2. HERO MODE SWITCHER (SPOTLIGHT VS 360°)
+   ========================================================================== */
+function setHeroViewMode(mode) {
+  appState.heroMode = mode;
+
+  const btnSpotlight = document.getElementById('btnModeSpotlight');
+  const btn360 = document.getElementById('btnMode360');
+  const viewSpotlight = document.getElementById('viewSpotlight');
+  const view360 = document.getElementById('view360');
+
+  if (mode === 'spotlight') {
+    btnSpotlight.classList.add('active');
+    btn360.classList.remove('active');
+    viewSpotlight.classList.add('active');
+    view360.classList.remove('active');
+    showToast('✨ Switched to Studio Spotlight View', 'orange');
+  } else {
+    btn360.classList.add('active');
+    btnSpotlight.classList.remove('active');
+    view360.classList.add('active');
+    viewSpotlight.classList.remove('active');
+    showToast('🔄 Drag horizontally to spin 360°', 'orange');
+  }
+}
+
+/* ==========================================================================
+   3. REAL DRAG-TO-ROTATE 360° TURNAROUND VIEWER (Asset 1)
+   ========================================================================== */
+function init360Viewer() {
+  const container = document.getElementById('viewer360Container');
+  const turnaroundImg = document.getElementById('turnaroundImg');
+  if (!container || !turnaroundImg) return;
+
+  let isDragging = false;
+  let startX = 0;
+  const pixelsPerFrame = 28; // drag distance required to change 1 frame
+  let accumulatedDelta = 0;
+
+  // Mouse drag handlers
+  container.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    accumulatedDelta = 0;
+    container.style.cursor = 'grabbing';
+  });
+
+  window.addEventListener('mouseup', () => {
+    if (isDragging) {
+      isDragging = false;
+      container.style.cursor = 'grab';
+    }
+  });
+
+  container.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - startX;
+    startX = e.clientX;
+    handleRotationStep(deltaX);
+  });
+
+  // Touch drag handlers (Mobile)
+  container.addEventListener('touchstart', (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      startX = e.touches[0].clientX;
+      accumulatedDelta = 0;
+    }
+  }, { passive: true });
+
+  container.addEventListener('touchend', () => {
+    isDragging = false;
+  });
+
+  container.addEventListener('touchmove', (e) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const currentX = e.touches[0].clientX;
+    const deltaX = currentX - startX;
+    startX = currentX;
+    handleRotationStep(deltaX);
+  }, { passive: true });
+
+  // Handle dot clicks
+  document.querySelectorAll('.turnaround-dots-row .t-dot').forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      const targetFrame = parseInt(e.currentTarget.getAttribute('data-frame'), 10);
+      if (!isNaN(targetFrame)) {
+        set360Frame(targetFrame);
+      }
+    });
+  });
+}
+
+function handleRotationStep(deltaX) {
+  // Dragging right rotates forward, dragging left rotates backward
+  const threshold = 22;
+  if (Math.abs(deltaX) < 1) return;
+
+  let nextFrame = appState.current360Frame;
+  if (deltaX > threshold / 2) {
+    nextFrame = appState.current360Frame + 1;
+    if (nextFrame > 7) nextFrame = 1;
+    set360Frame(nextFrame);
+  } else if (deltaX < -threshold / 2) {
+    nextFrame = appState.current360Frame - 1;
+    if (nextFrame < 1) nextFrame = 7;
+    set360Frame(nextFrame);
+  }
+}
+
+function set360Frame(frameIndex) {
+  appState.current360Frame = frameIndex;
+  const frameData = appState.turnaroundFrames[frameIndex - 1];
+  if (!frameData) return;
+
+  const turnaroundImg = document.getElementById('turnaroundImg');
+  const angleLabel = document.getElementById('angleNameText');
+  const dots = document.querySelectorAll('.turnaround-dots-row .t-dot');
+
+  if (turnaroundImg) {
+    turnaroundImg.src = frameData.src;
+  }
+  if (angleLabel) {
+    angleLabel.textContent = frameData.label;
+  }
+
+  // Update dots
+  dots.forEach(dot => {
+    const f = parseInt(dot.getAttribute('data-frame'), 10);
+    dot.classList.toggle('active', f === frameIndex);
+  });
+}
+
+/* ==========================================================================
+   4. 3D HERO PRODUCT TILT & PARALLAX EFFECT
    ========================================================================== */
 function init3DHeroTilt() {
   const stage = document.getElementById('hero3DStage');
   const card = document.getElementById('product3DCard');
-  const glare = document.getElementById('glareLayer');
   if (!stage || !card) return;
 
   let isHovered = false;
 
   stage.addEventListener('mouseenter', () => {
     isHovered = true;
-    if (glare) glare.style.opacity = '0.35';
   });
 
   stage.addEventListener('mouseleave', () => {
     isHovered = false;
     card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    if (glare) glare.style.opacity = '0';
   });
 
   stage.addEventListener('mousemove', (e) => {
-    if (!isHovered) return;
+    if (!isHovered || appState.heroMode === '360') return; // Tilt in spotlight mode
 
     const rect = stage.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -88,25 +243,17 @@ function init3DHeroTilt() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Max rotation angles (degrees)
-    const rotateX = -((y - centerY) / centerY) * 14;
-    const rotateY = ((x - centerX) / centerX) * 16;
+    const rotateX = -((y - centerY) / centerY) * 12;
+    const rotateY = ((x - centerX) / centerX) * 14;
 
-    card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`;
-
-    if (glare) {
-      const glareX = (x / rect.width) * 100;
-      const glareY = (y / rect.height) * 100;
-      glare.style.background = `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255, 255, 255, 0.3) 0%, transparent 60%)`;
-      glare.style.opacity = '0.45';
-    }
+    card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
   });
 
   // Window scroll subtle parallax
   window.addEventListener('scroll', () => {
     const scrollY = window.scrollY;
     if (scrollY < 800) {
-      const floatY = Math.sin(scrollY * 0.005) * 6;
+      const floatY = Math.sin(scrollY * 0.005) * 5;
       if (!isHovered) {
         card.style.transform = `perspective(1200px) translateY(${floatY.toFixed(1)}px)`;
       }
@@ -115,13 +262,53 @@ function init3DHeroTilt() {
 }
 
 /* ==========================================================================
-   2. VARIANT SWITCHER
+   5. REAL VIDEO PLAYER (SCROLL-INTO-VIEW AUTOPLAY & UNMUTE)
    ========================================================================== */
-function initVariantSelection() {
-  // Sync initial state
-  selectVariant('white', false);
+function initVideoPlayer() {
+  const video = document.getElementById('howItWorksVideo');
+  if (!video) return;
+
+  // IntersectionObserver to auto-play muted on scroll into view
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {
+            // Autoplay policy prevented playback, controls remain interactive
+          });
+        } else {
+          video.pause();
+        }
+      });
+    }, { threshold: 0.35 });
+
+    observer.observe(video);
+  }
 }
 
+function toggleVideoSound() {
+  const video = document.getElementById('howItWorksVideo');
+  const icon = document.getElementById('unmuteIcon');
+  const text = document.getElementById('unmuteText');
+  if (!video) return;
+
+  if (video.muted) {
+    video.muted = false;
+    video.play().catch(() => {});
+    if (icon) icon.textContent = '🔇';
+    if (text) text.textContent = 'Mute Audio';
+    showToast('🔊 Audio Unmuted');
+  } else {
+    video.muted = true;
+    if (icon) icon.textContent = '🔊';
+    if (text) text.textContent = 'Click for Sound';
+    showToast('🔇 Audio Muted');
+  }
+}
+
+/* ==========================================================================
+   6. VARIANT SWITCHER
+   ========================================================================== */
 function selectVariant(variantKey, triggerToast = true) {
   if (!appState.variants[variantKey]) return;
   appState.currentVariant = variantKey;
@@ -135,12 +322,10 @@ function selectVariant(variantKey, triggerToast = true) {
 
   if (heroImg) {
     heroImg.style.opacity = '0.3';
-    heroImg.style.transform = 'scale(0.97)';
     setTimeout(() => {
       heroImg.src = variant.image;
       heroImg.alt = `Rotimatic NEXT ${variant.name}`;
       heroImg.style.opacity = '1';
-      heroImg.style.transform = 'scale(1)';
     }, 150);
   }
 
@@ -155,17 +340,7 @@ function selectVariant(variantKey, triggerToast = true) {
   const cardBlack = document.getElementById('variantCardBlack');
 
   if (cardWhite && cardBlack) {
-    if (variantKey === 'white') {
-      cardWhite.classList.add('active');
-      cardWhite.setAttribute('aria-pressed', 'true');
-      cardWhite.querySelector('.select-text').textContent = 'Selected (Active)';
-      cardWhite.querySelector('.check-icon').textContent = '✓';
-
-      cardBlack.classList.remove('active');
-      cardBlack.setAttribute('aria-pressed', 'false');
-      cardBlack.querySelector('.select-text').textContent = 'Choose Onyx Black';
-      cardBlack.querySelector('.check-icon').textContent = '→';
-    } else {
+    if (variantKey === 'black') {
       cardBlack.classList.add('active');
       cardBlack.setAttribute('aria-pressed', 'true');
       cardBlack.querySelector('.select-text').textContent = 'Selected (Active)';
@@ -175,6 +350,16 @@ function selectVariant(variantKey, triggerToast = true) {
       cardWhite.setAttribute('aria-pressed', 'false');
       cardWhite.querySelector('.select-text').textContent = 'Choose Polar White';
       cardWhite.querySelector('.check-icon').textContent = '→';
+    } else {
+      cardWhite.classList.add('active');
+      cardWhite.setAttribute('aria-pressed', 'true');
+      cardWhite.querySelector('.select-text').textContent = 'Selected (Active)';
+      cardWhite.querySelector('.check-icon').textContent = '✓';
+
+      cardBlack.classList.remove('active');
+      cardBlack.setAttribute('aria-pressed', 'false');
+      cardBlack.querySelector('.select-text').textContent = 'Choose Onyx Black';
+      cardBlack.querySelector('.check-icon').textContent = '→';
     }
   }
 
@@ -197,148 +382,7 @@ function selectAndCheckout(variantKey) {
 }
 
 /* ==========================================================================
-   3. "HOW IT WORKS" VIDEO & PROCESS SIMULATION
-   ========================================================================== */
-let simulationInterval = null;
-let currentStep = 1;
-let isPlaying = false;
-let simTime = 45; // seconds (0 to 90)
-
-const stepData = {
-  1: {
-    number: 'STEP 1',
-    text: 'Airtight Canisters Dosing Water, Oil & Whole Wheat Flour',
-    temp: 'CHAMBER: 180°C',
-    duration: '0:00 - 0:30'
-  },
-  2: {
-    number: 'STEP 2',
-    text: 'Twin Calibrated Discs Compressing Dough Ball (400kg force)',
-    temp: 'CHAMBER: 235°C',
-    duration: '0:30 - 1:05'
-  },
-  3: {
-    number: 'STEP 3',
-    text: 'Dual 360° Baking Plates Vaporizing Moisture & Balloon-Puffing Roti',
-    temp: 'CHAMBER: 245°C (PEAK)',
-    duration: '1:05 - 1:30'
-  }
-};
-
-function initVideoSimulation() {
-  updateSimulationUI();
-}
-
-function togglePlaySimulation() {
-  const playBtn = document.getElementById('playVideoBtn');
-  const playIcon = document.getElementById('playIconSvg');
-
-  if (isPlaying) {
-    pauseSimulation();
-    showToast('Simulation Paused');
-  } else {
-    playSimulation();
-    showToast('Live telemetry simulation running...');
-  }
-}
-
-function playSimulation() {
-  isPlaying = true;
-  const playIcon = document.getElementById('playIconSvg');
-  if (playIcon) {
-    playIcon.innerHTML = `<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>`;
-  }
-
-  if (simulationInterval) clearInterval(simulationInterval);
-  simulationInterval = setInterval(() => {
-    simTime += 1;
-    if (simTime > 90) {
-      simTime = 0; // loop
-    }
-    updateSimulationStepFromTime();
-    updateSimulationUI();
-  }, 350);
-}
-
-function pauseSimulation() {
-  isPlaying = false;
-  const playIcon = document.getElementById('playIconSvg');
-  if (playIcon) {
-    playIcon.innerHTML = `<polygon points="5 3 19 12 5 21 5 3"></polygon>`;
-  }
-  if (simulationInterval) {
-    clearInterval(simulationInterval);
-    simulationInterval = null;
-  }
-}
-
-function updateSimulationStepFromTime() {
-  if (simTime <= 30) {
-    currentStep = 1;
-  } else if (simTime <= 65) {
-    currentStep = 2;
-  } else {
-    currentStep = 3;
-  }
-}
-
-function jumpToStep(stepNum) {
-  currentStep = stepNum;
-  if (stepNum === 1) simTime = 10;
-  if (stepNum === 2) simTime = 45;
-  if (stepNum === 3) simTime = 75;
-  updateSimulationUI();
-}
-
-function scrubTimeline(event) {
-  const bar = event.currentTarget;
-  const rect = bar.getBoundingClientRect();
-  const clickX = event.clientX - rect.left;
-  const pct = Math.max(0, Math.min(1, clickX / rect.width));
-  simTime = Math.round(pct * 90);
-  updateSimulationStepFromTime();
-  updateSimulationUI();
-}
-
-function updateSimulationUI() {
-  // Update HUD text
-  const stepInfo = stepData[currentStep];
-  const hudNumber = document.getElementById('hudStepNumber');
-  const hudText = document.getElementById('hudStepText');
-  const hudTemp = document.getElementById('hudTemp');
-  const fill = document.getElementById('timelineFill');
-  const elapsed = document.getElementById('timeElapsed');
-
-  if (hudNumber) hudNumber.textContent = stepInfo.number;
-  if (hudText) hudText.textContent = stepInfo.text;
-  if (hudTemp) hudTemp.textContent = stepInfo.temp;
-
-  if (fill) {
-    const pct = (simTime / 90) * 100;
-    fill.style.width = `${pct}%`;
-  }
-
-  if (elapsed) {
-    const mins = Math.floor(simTime / 60);
-    const secs = simTime % 60;
-    elapsed.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-  }
-
-  // Update step cards highlight
-  [1, 2, 3].forEach((num) => {
-    const card = document.getElementById(`stepCard${num}`);
-    if (card) {
-      if (num === currentStep) {
-        card.classList.add('active');
-      } else {
-        card.classList.remove('active');
-      }
-    }
-  });
-}
-
-/* ==========================================================================
-   4. CHECKOUT / BUY NOW MODAL FLOW
+   7. CHECKOUT / BUY NOW MODAL FLOW
    ========================================================================== */
 function openCheckoutModal(variantKey = null) {
   if (variantKey && appState.variants[variantKey]) {
@@ -398,7 +442,6 @@ function updateCheckoutSummary() {
   const qty = appState.quantity;
   const unitPrice = variant.price;
   const subtotal = unitPrice * qty;
-  // 18% GST is included in subtotal
   const gstAmount = Math.round(subtotal - (subtotal / 1.18));
 
   // Update summary preview
@@ -418,7 +461,6 @@ function updateCheckoutSummary() {
   if (gstEl) gstEl.textContent = `₹${gstAmount.toLocaleString('en-IN')}`;
   if (totalEl) totalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
 
-  // Update all payment total labels
   document.querySelectorAll('.payTotalDisplay').forEach(el => {
     el.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
   });
@@ -430,7 +472,6 @@ function updateCheckoutSummary() {
 }
 
 function goToCheckoutStep(stepNumber) {
-  // If moving from Step 1 to Step 2, validate and store shipping details
   if (stepNumber === 2) {
     const nameInput = document.getElementById('custName');
     const phoneInput = document.getElementById('custPhone');
@@ -445,7 +486,6 @@ function goToCheckoutStep(stepNumber) {
     if (pinInput && pinInput.value.trim()) appState.customer.pin = pinInput.value.trim();
   }
 
-  // Hide all steps, show target step
   [1, 2, 3].forEach(num => {
     const stepEl = document.getElementById(`checkoutStep${num}`);
     const tabEl = document.getElementById(`cStepTab${num}`);
@@ -453,7 +493,6 @@ function goToCheckoutStep(stepNumber) {
     if (tabEl) tabEl.classList.toggle('active', num <= stepNumber);
   });
 
-  // Scroll modal container to top
   const container = document.querySelector('.checkout-modal-container');
   if (container) container.scrollTop = 0;
 }
@@ -485,12 +524,10 @@ function processDummyPayment() {
     placeBtn.disabled = false;
     placeBtn.innerHTML = origHtml;
 
-    // Generate dummy order data
     const randomOrderId = '#ROTI-2026-' + Math.floor(1000 + Math.random() * 9000);
     const variant = appState.variants[appState.currentVariant];
     const total = (variant.price * appState.quantity).toLocaleString('en-IN');
 
-    // Populate confirmation screen
     const nameEl = document.getElementById('confCustomerName');
     const orderIdEl = document.getElementById('confOrderId');
     const variantEl = document.getElementById('confVariant');
@@ -517,7 +554,7 @@ function processDummyPayment() {
 }
 
 /* ==========================================================================
-   5. NAVIGATION & UTILITIES
+   8. NAVIGATION & UTILITIES
    ========================================================================== */
 function initNavigationScroll() {
   const links = document.querySelectorAll('.nav-link');
@@ -565,7 +602,6 @@ function initMobileMenu() {
     }
   });
 
-  // Close when link clicked
   navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       if (window.innerWidth <= 768) {
