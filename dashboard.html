@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account | Rotimatic NEXT</title>
+  <meta name="description" content="Manage your Rotimatic NEXT profile and saved addresses." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="dashboard-page">
+  <div class="dashboard-loading" id="dashboardLoading" role="status" aria-live="polite">
+    <span class="loading-ring" aria-hidden="true"></span>
+    <span>Checking your account...</span>
+  </div>
+
+  <div class="dashboard-shell" id="dashboardShell" hidden>
+    <header class="dashboard-topbar">
+      <a class="dashboard-brand" href="index.html" aria-label="Rotimatic NEXT home">
+        <span class="auth-logo-mark">R</span>
+        <span>ROTIMATIC <small>NEXT</small></span>
+      </a>
+      <div class="dashboard-top-actions">
+        <a class="dashboard-home-link" href="index.html">Back to site</a>
+        <button class="logout-button" id="logoutButton" type="button">Log out</button>
+      </div>
+    </header>
+
+    <div class="dashboard-layout">
+      <aside class="dashboard-sidebar" aria-label="Account navigation">
+        <div class="dashboard-user-mini">
+          <span class="avatar-circle" id="userInitials">R</span>
+          <div><strong id="sidebarName">My account</strong><span id="sidebarEmail"></span></div>
+        </div>
+        <nav class="dashboard-nav">
+          <button class="dashboard-nav-link active" type="button" data-view="overview">Overview</button>
+          <button class="dashboard-nav-link" type="button" data-view="profile">Profile</button>
+          <button class="dashboard-nav-link" type="button" data-view="addresses">Addresses</button>
+          <button class="dashboard-nav-link nav-coming-soon" type="button" data-view="orders">Orders <span>Coming soon</span></button>
+        </nav>
+        <p class="sidebar-note">Your account details are protected by your Rotimatic session.</p>
+      </aside>
+
+      <main class="dashboard-main" id="dashboardMain">
+        <div class="dashboard-heading">
+          <div>
+            <span class="section-kicker">My account</span>
+            <h1 id="dashboardWelcome">Welcome.</h1>
+            <p id="dashboardSubtitle">Manage your account details and delivery information.</p>
+          </div>
+          <span class="account-status"><span></span> Account active</span>
+        </div>
+        <div class="dashboard-message" id="dashboardMessage" role="status" aria-live="polite"></div>
+
+        <section class="dashboard-view active" data-panel="overview" aria-labelledby="overviewTitle">
+          <h2 class="sr-only" id="overviewTitle">Account overview</h2>
+          <div class="overview-grid">
+            <article class="dashboard-card profile-summary-card">
+              <div class="card-heading-row"><div><span class="card-eyebrow">Your details</span><h2>Profile</h2></div><button class="text-action" type="button" data-view-target="profile">Edit profile</button></div>
+              <div class="profile-summary-body"><span class="avatar-large" id="overviewInitials">R</span><div><h3 id="overviewName">Loading...</h3><p id="overviewEmail">Loading...</p><p id="overviewPhone">Phone not added</p></div></div>
+              <div class="summary-meta-row"><span>Member since</span><strong id="overviewCreated">-</strong></div>
+            </article>
+            <article class="dashboard-card address-summary-card">
+              <div class="card-heading-row"><div><span class="card-eyebrow">Delivery</span><h2>Saved addresses</h2></div><button class="text-action" type="button" data-view-target="addresses">Manage</button></div>
+              <div id="overviewAddressSummary" class="overview-address-summary"><span class="mini-icon">+</span><p>No saved addresses yet.</p></div>
+              <button class="btn btn-secondary btn-small" type="button" data-view-target="addresses">Add an address</button>
+            </article>
+            <article class="dashboard-card orders-summary-card">
+              <div class="card-heading-row"><div><span class="card-eyebrow">Next chapter</span><h2>Orders</h2></div><span class="coming-soon-badge">Coming soon</span></div>
+              <div class="empty-orders"><span class="orders-icon" aria-hidden="true">◌</span><p>Order history will appear here once you place an order.</p></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="dashboard-view" data-panel="profile" aria-labelledby="profileTitle" hidden>
+          <div class="section-panel-heading"><div><span class="card-eyebrow">Personal details</span><h2 id="profileTitle">Profile</h2><p>Keep your contact details up to date.</p></div><button class="btn btn-secondary btn-small" id="profileEditButton" type="button">Edit profile</button></div>
+          <div class="profile-panel dashboard-card">
+            <div class="profile-readonly-grid">
+              <div><span class="field-label">Email address</span><strong id="profileEmail">-</strong><small>Used for signing in</small></div>
+              <div><span class="field-label">Account created</span><strong id="profileCreated">-</strong></div>
+            </div>
+            <form id="profileForm" hidden>
+              <div class="account-form-grid">
+                <div class="account-form-field"><label for="profileFirstName">First name</label><input id="profileFirstName" name="firstName" required /></div>
+                <div class="account-form-field"><label for="profileLastName">Last name</label><input id="profileLastName" name="lastName" required /></div>
+              </div>
+              <div class="account-form-field"><label for="profilePhone">Phone</label><input id="profilePhone" name="phone" type="tel" required /></div>
+              <div class="form-actions"><button class="btn btn-secondary btn-small" id="profileCancelButton" type="button">Cancel</button><button class="btn btn-primary btn-small" id="profileSaveButton" type="submit">Save changes</button></div>
+            </form>
+          </div>
+        </section>
+
+        <section class="dashboard-view" data-panel="addresses" aria-labelledby="addressesTitle" hidden>
+          <div class="section-panel-heading"><div><span class="card-eyebrow">Delivery details</span><h2 id="addressesTitle">Addresses</h2><p>Save the places where your Rotimatic belongs.</p></div><button class="btn btn-primary btn-small" id="addAddressButton" type="button">+ Add address</button></div>
+          <div id="addressMessage" class="inline-message" role="status" aria-live="polite"></div>
+          <div id="addressLoading" class="section-loading"><span class="loading-ring" aria-hidden="true"></span> Loading addresses...</div>
+          <div id="addressList" class="address-grid"></div>
+          <div id="addressEmpty" class="dashboard-card empty-state" hidden><span class="empty-state-mark">+</span><h3>No saved addresses yet.</h3><p>Add a delivery address to make future orders easier.</p><button class="btn btn-primary btn-small" type="button" data-open-address-form>Add address</button></div>
+        </section>
+
+        <section class="dashboard-view" data-panel="orders" aria-labelledby="ordersTitle" hidden>
+          <div class="section-panel-heading"><div><span class="card-eyebrow">Coming soon</span><h2 id="ordersTitle">Orders</h2><p>Order history will appear here once you place an order.</p></div></div>
+          <div class="dashboard-card orders-empty-panel"><span class="orders-icon" aria-hidden="true">◌</span><h3>Your order history is on its way.</h3><p>There are no order or payment details to show yet.</p></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop dashboard-modal" id="addressModal" aria-hidden="true">
+    <section class="address-modal" role="dialog" aria-modal="true" aria-labelledby="addressModalTitle">
+      <div class="modal-header"><div><span class="card-eyebrow">Delivery details</span><h2 id="addressModalTitle">Add address</h2></div><button class="modal-close-btn" id="closeAddressModal" type="button" aria-label="Close address form">✕</button></div>
+      <form id="addressForm" class="address-form">
+        <div id="addressFormMessage" class="form-message" role="alert" aria-live="polite"></div>
+        <div class="account-form-field"><label for="addressFullName">Full name</label><input id="addressFullName" name="fullName" required /></div>
+        <div class="account-form-grid"><div class="account-form-field"><label for="addressPhone">Phone</label><input id="addressPhone" name="phone" type="tel" required /></div><div class="account-form-field"><label for="addressCountry">Country</label><input id="addressCountry" name="country" value="India" required /></div></div>
+        <div class="account-form-field"><label for="addressLine1">Address line 1</label><input id="addressLine1" name="addressLine1" required /></div>
+        <div class="account-form-field"><label for="addressLine2">Address line 2 <span>(optional)</span></label><input id="addressLine2" name="addressLine2" /></div>
+        <div class="account-form-grid"><div class="account-form-field"><label for="addressCity">City</label><input id="addressCity" name="city" required /></div><div class="account-form-field"><label for="addressState">State</label><input id="addressState" name="state" required /></div></div>
+        <div class="account-form-field"><label for="addressPostalCode">Postal code</label><input id="addressPostalCode" name="postalCode" required /></div>
+        <label class="checkbox-field"><input id="addressIsDefault" name="isDefault" type="checkbox" /><span>Make this my default address</span></label>
+        <div class="form-actions"><button class="btn btn-secondary btn-small" id="cancelAddressButton" type="button">Cancel</button><button class="btn btn-primary btn-small" id="saveAddressButton" type="submit">Save address</button></div>
+      </form>
+    </section>
+  </div>
+  <script src="api-client.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

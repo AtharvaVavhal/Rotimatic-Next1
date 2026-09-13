@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account | Rotimatic NEXT</title>
+  <meta name="description" content="Create your Rotimatic NEXT account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="account-page">
+  <main class="auth-shell">
+    <a class="auth-brand" href="index.html" aria-label="Rotimatic NEXT home">
+      <span class="auth-logo-mark">R</span>
+      <span>ROTIMATIC <small>NEXT</small></span>
+    </a>
+    <section class="auth-panel" aria-labelledby="signupTitle">
+      <div class="auth-panel-heading">
+        <span class="section-kicker">Your account</span>
+        <h1 id="signupTitle">Make room for easier.</h1>
+        <p>Create an account to keep your profile and delivery details ready.</p>
+      </div>
+      <div class="form-message" id="signupMessage" role="alert" aria-live="polite"></div>
+      <form id="signupForm" novalidate>
+        <div class="account-form-grid">
+          <div class="account-form-field">
+            <label for="signupFirstName">First name</label>
+            <input id="signupFirstName" name="firstName" type="text" autocomplete="given-name" required />
+          </div>
+          <div class="account-form-field">
+            <label for="signupLastName">Last name</label>
+            <input id="signupLastName" name="lastName" type="text" autocomplete="family-name" required />
+          </div>
+        </div>
+        <div class="account-form-field">
+          <label for="signupEmail">Email address</label>
+          <input id="signupEmail" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="account-form-field">
+          <label for="signupPhone">Phone <span>(optional)</span></label>
+          <input id="signupPhone" name="phone" type="tel" autocomplete="tel" />
+        </div>
+        <div class="account-form-field">
+          <label for="signupPassword">Password</label>
+          <input id="signupPassword" name="password" type="password" minlength="8" autocomplete="new-password" required />
+          <small class="field-hint">Use at least 8 characters.</small>
+        </div>
+        <button class="btn btn-primary btn-block" id="signupSubmit" type="submit">Create account</button>
+      </form>
+      <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+      <a class="auth-back-link" href="index.html">← Back to Rotimatic NEXT</a>
+    </section>
+  </main>
+  <script src="api-client.js"></script>
+  <script src="signup.js"></script>
+</body>
+</html>

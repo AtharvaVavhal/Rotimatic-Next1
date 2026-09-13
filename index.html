@@ -77,6 +77,7 @@
       </div>
 
       <div class="nav-actions">
+        <a href="login.html" class="nav-account-link" id="accountNavLink">Login</a>
         <a href="tel:+9118002008899" class="nav-call-btn" title="Call Helpline: 1800-200-8899">
           <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -1167,7 +1168,7 @@
         <div class="c-step-divider"></div>
         <div class="c-step-item" id="cStepTab2">
           <span class="c-step-num">2</span>
-          <span class="c-step-label">Payment</span>
+          <span class="c-step-label">Review</span>
         </div>
         <div class="c-step-divider"></div>
         <div class="c-step-item" id="cStepTab3">
@@ -1223,36 +1224,16 @@
               </div>
             </div>
 
-            <!-- Delivery Address Form -->
+            <!-- Saved Delivery Address -->
             <h3 class="panel-heading mt-4">2. Shipping Address</h3>
-            <form id="shippingForm" onsubmit="event.preventDefault(); goToCheckoutStep(2);">
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="custName">Full Name *</label>
-                  <input type="text" id="custName" placeholder="e.g. Rahul Sharma" required value="Rahul Sharma" />
-                </div>
-                <div class="form-group">
-                  <label for="custPhone">Phone Number *</label>
-                  <input type="tel" id="custPhone" placeholder="e.g. 9876543210" required value="9876543210" />
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="custAddress">Complete Street Address *</label>
-                <input type="text" id="custAddress" placeholder="Flat / House No., Building Name, Street" required value="Flat 402, Lotus Grand, Link Road" />
-              </div>
-
-              <div class="form-row-2">
-                <div class="form-group">
-                  <label for="custCity">City *</label>
-                  <input type="text" id="custCity" placeholder="e.g. Mumbai" required value="Mumbai" />
-                </div>
-                <div class="form-group">
-                  <label for="custPin">PIN Code *</label>
-                  <input type="text" id="custPin" placeholder="e.g. 400050" required value="400050" />
-                </div>
-              </div>
-            </form>
+            <div class="form-group">
+              <label for="checkoutAddressSelect">Saved address *</label>
+              <select id="checkoutAddressSelect" class="form-select" required>
+                <option value="">Loading saved addresses...</option>
+              </select>
+            </div>
+            <p id="checkoutAddressMessage" class="checkout-address-message" role="status" aria-live="polite"></p>
+            <a class="checkout-dashboard-link" href="dashboard.html">Manage addresses in My Account →</a>
           </div>
 
           <!-- Right: Live Order Summary -->
@@ -1285,7 +1266,7 @@
                   <span class="free-text">FREE</span>
                 </div>
                 <div class="cost-line">
-                  <span>GST (18% Included)</span>
+                  <span>Tax (currently zero)</span>
                   <span id="costGst">₹3,813</span>
                 </div>
                 <div class="cost-divider"></div>
@@ -1302,144 +1283,35 @@
               </div>
 
               <button type="button" class="btn btn-primary btn-block btn-lg" onclick="goToCheckoutStep(2)">
-                Proceed to Payment →
+                Proceed to Review →
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- STEP 2: DUMMY PAYMENT FLOW -->
+      <!-- STEP 2: ORDER REVIEW -->
       <div class="modal-body-step" id="checkoutStep2">
-        <div class="payment-step-container">
+        <div class="payment-step-container order-review-step">
           <div class="demo-client-notice">
-            <span class="notice-icon">⚙️</span>
+            <span class="notice-icon">⌁</span>
             <div class="notice-body">
-              <strong>DEMO CLIENT MODE — NO REAL PAYMENT REQUIRED</strong>
-              <p>
-                Payment gateway is currently mocked for client demonstration. As instructed, clicking "Place Order" will test the complete conversion flow.
-              </p>
+              <strong>ORDER CREATED — PAYMENT PENDING</strong>
+              <p>Your order will be saved as pending. Payment will be added in a later step.</p>
             </div>
           </div>
-
-          <div class="payment-methods-box">
-            <h3 class="panel-heading">Select Payment Method</h3>
-
-            <!-- Payment Method Tabs -->
-            <div class="payment-tabs-nav">
-              <button class="pay-tab-btn active" id="tabUpi" onclick="switchPayTab('upi')">
-                <span>📱 UPI / QR Code</span>
-              </button>
-              <button class="pay-tab-btn" id="tabCard" onclick="switchPayTab('card')">
-                <span>💳 Cards & NetBanking</span>
-              </button>
-              <button class="pay-tab-btn" id="tabCod" onclick="switchPayTab('cod')">
-                <span>📦 50% Advance / COD</span>
-              </button>
-            </div>
-
-            <!-- Tab 1: UPI Content -->
-            <div class="pay-tab-content active" id="contentUpi">
-              <div class="upi-mock-ui">
-                <div class="upi-apps-row">
-                  <div class="upi-app-badge active">
-                    <span class="app-icon gpay">G</span>
-                    <span>Google Pay</span>
-                  </div>
-                  <div class="upi-app-badge">
-                    <span class="app-icon phonepe">Pe</span>
-                    <span>PhonePe</span>
-                  </div>
-                  <div class="upi-app-badge">
-                    <span class="app-icon paytm">Pay</span>
-                    <span>Paytm</span>
-                  </div>
-                  <div class="upi-app-badge">
-                    <span class="app-icon bhim">B</span>
-                    <span>BHIM UPI</span>
-                  </div>
-                </div>
-
-                <div class="upi-qr-mock">
-                  <div class="qr-placeholder">
-                    <!-- Simulated SVG QR Code -->
-                    <svg viewBox="0 0 120 120" width="100" height="100">
-                      <rect width="120" height="120" fill="#FFFFFF"/>
-                      <rect x="10" y="10" width="30" height="30" fill="#000000"/>
-                      <rect x="15" y="15" width="20" height="20" fill="#FFFFFF"/>
-                      <rect x="20" y="20" width="10" height="10" fill="#000000"/>
-                      <rect x="80" y="10" width="30" height="30" fill="#000000"/>
-                      <rect x="85" y="15" width="20" height="20" fill="#FFFFFF"/>
-                      <rect x="90" y="20" width="10" height="10" fill="#000000"/>
-                      <rect x="10" y="80" width="30" height="30" fill="#000000"/>
-                      <rect x="15" y="85" width="20" height="20" fill="#FFFFFF"/>
-                      <rect x="20" y="90" width="10" height="10" fill="#000000"/>
-                      <rect x="50" y="20" width="15" height="15" fill="#000000"/>
-                      <rect x="50" y="50" width="20" height="20" fill="#FF8A00"/>
-                      <rect x="80" y="60" width="15" height="15" fill="#000000"/>
-                      <rect x="50" y="85" width="15" height="25" fill="#000000"/>
-                      <rect x="80" y="90" width="30" height="20" fill="#000000"/>
-                    </svg>
-                  </div>
-                  <div class="qr-info">
-                    <div class="qr-vpa">UPI ID: <code>rotimatic@hdfcbank</code></div>
-                    <p class="qr-note">Scan with any UPI app to complete payment of <strong class="payTotalDisplay">₹24,999</strong>.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tab 2: Card Content -->
-            <div class="pay-tab-content" id="contentCard">
-              <div class="card-mock-form">
-                <div class="form-group">
-                  <label>Card Number</label>
-                  <input type="text" placeholder="4532 •••• •••• 8892" value="4532 •••• •••• 8892" readonly />
-                </div>
-                <div class="form-row-2">
-                  <div class="form-group">
-                    <label>Expiry Date</label>
-                    <input type="text" placeholder="MM/YY" value="08/28" readonly />
-                  </div>
-                  <div class="form-group">
-                    <label>CVV / CVC</label>
-                    <input type="password" placeholder="•••" value="789" readonly />
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label>Cardholder Name</label>
-                  <input type="text" placeholder="Full name on card" value="Rahul Sharma" readonly />
-                </div>
-              </div>
-            </div>
-
-            <!-- Tab 3: COD / 50% Advance -->
-            <div class="pay-tab-content" id="contentCod">
-              <div class="cod-mock-box">
-                <div class="cod-badge">⚡ 50% ADVANCE BOOKING OPTION</div>
-                <p>
-                  Pay 50% (<span class="payHalfDisplay">₹12,499</span>) today to confirm your booking and reserve factory production queue. Pay the remaining 50% via cash/UPI upon delivery at your doorstep.
-                </p>
-                <div class="cod-feature-points">
-                  <span>✓ 100% Verified Delivery Handover</span>
-                  <span>✓ Doorstep Inspection Allowed</span>
-                  <span>✓ Free Cancellation before dispatch</span>
-                </div>
-              </div>
-            </div>
+          <div class="order-review-summary">
+            <h3 class="panel-heading">Review your order</h3>
+            <div class="cost-line"><span>Product</span><strong id="reviewProductName">Rotimatic NEXT</strong></div>
+            <div class="cost-line"><span>Quantity</span><strong id="reviewQuantity">1</strong></div>
+            <div class="cost-line"><span>Shipping</span><span class="free-text">FREE</span></div>
+            <div class="cost-line"><span>Tax</span><span>₹0.00</span></div>
+            <div class="cost-divider"></div>
+            <div class="cost-line total-line"><span>Total</span><strong class="total-amount" id="reviewTotal">₹24,999</strong></div>
           </div>
-
-          <!-- Checkout Controls -->
           <div class="payment-action-buttons">
-            <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(1)">
-              ← Back to Details
-            </button>
-            <button type="button" class="btn btn-primary btn-lg pulse-shadow" id="placeOrderBtn" onclick="processDummyPayment()">
-              <span>Place Order (<span class="payTotalDisplay">₹24,999</span>)</span>
-              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"></polyline>
-              </svg>
-            </button>
+            <button type="button" class="btn btn-secondary" onclick="goToCheckoutStep(1)">← Back to Details</button>
+            <button type="button" class="btn btn-primary btn-lg pulse-shadow" id="placeOrderBtn" onclick="processRealOrder()">Create Pending Order</button>
           </div>
         </div>
       </div>
@@ -1455,51 +1327,40 @@
             </div>
           </div>
 
-          <h3 class="conf-title">Booking Confirmed!</h3>
+          <h3 class="conf-title">Order created.</h3>
           <p class="conf-subtitle">
-            Thank you, <strong id="confCustomerName">Rahul Sharma</strong>! Your Rotimatic NEXT order has been successfully queued.
+            Your payment has not been verified yet.
           </p>
 
           <div class="order-details-ticket">
             <div class="ticket-row">
               <span class="ticket-label">Order Reference:</span>
-              <span class="ticket-val" id="confOrderId">#ROTI-2026-9842</span>
+              <span class="ticket-val" id="confOrderId">—</span>
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Product Selected:</span>
-              <span class="ticket-val" id="confVariant">Onyx Black Edition (1 Unit)</span>
+              <span class="ticket-val" id="confVariant">—</span>
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Total Amount:</span>
-              <span class="ticket-val" id="confTotal">₹24,999 (Inclusive of 18% GST)</span>
+              <span class="ticket-val" id="confTotal">—</span>
             </div>
             <div class="ticket-row">
               <span class="ticket-label">Delivery Destination:</span>
-              <span class="ticket-val" id="confDestination">Mumbai, Maharashtra (400050)</span>
+              <span class="ticket-val" id="confDestination">—</span>
             </div>
             <div class="ticket-row">
-              <span class="ticket-label">Warranty:</span>
-              <span class="ticket-val orange-text">5-Year Comprehensive Activated</span>
+              <span class="ticket-label">Status:</span>
+              <span class="ticket-val orange-text" id="confStatus">Pending payment</span>
             </div>
             <div class="ticket-row">
-              <span class="ticket-label">Estimated Delivery:</span>
-              <span class="ticket-val">3–5 Business Days via Express Courier</span>
+              <span class="ticket-label">Currency:</span>
+              <span class="ticket-val" id="confCurrency">INR</span>
             </div>
           </div>
 
           <div class="conf-actions-row">
-            <a
-              id="confWhatsAppBtn"
-              href="https://wa.me/919876543210?text=Hi%2C%20I%20just%20placed%20order%20ROTI-2026-9842"
-              target="_blank"
-              class="btn btn-primary"
-            >
-              <span>Get Order Updates on WhatsApp</span>
-              <svg class="icon-svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
-                <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.63C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2ZM12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.16 12.04 20.16C10.66 20.16 9.3 19.8 8.1 19.08L7.81 18.91L4.69 19.73L5.52 16.69L5.33 16.39C4.54 15.13 4.12 13.54 4.12 11.91C4.12 7.37 7.82 3.67 12.05 3.67ZM8.94 7.39C8.76 7.39 8.46 7.46 8.21 7.73C7.96 8 7.25 8.66 7.25 10.03C7.25 11.4 8.25 12.72 8.39 12.91C8.53 13.1 10.32 15.86 13.06 17.04C15.34 18.02 15.8 17.82 16.29 17.78C16.78 17.73 17.88 17.12 18.11 16.48C18.34 15.84 18.34 15.29 18.27 15.18C18.2 15.06 18.02 14.99 17.74 14.85C17.47 14.72 16.1 14.04 15.85 13.95C15.6 13.86 15.41 13.81 15.23 14.09C15.05 14.36 14.52 14.99 14.36 15.18C14.2 15.36 14.04 15.38 13.77 15.25C13.5 15.11 12.61 14.82 11.56 13.89C10.74 13.16 10.19 12.26 10.03 11.98C9.87 11.71 10.01 11.56 10.15 11.42C10.27 11.3 10.42 11.11 10.56 10.95C10.7 10.79 10.74 10.67 10.83 10.49C10.92 10.31 10.88 10.15 10.81 10.01C10.74 9.87 10.21 8.52 9.97 7.99C9.75 7.47 9.52 7.54 9.35 7.53L8.94 7.39Z"/>
-          </svg>
-          <span>Get Order Updates on WhatsApp</span>
-        </a>
+            <a class="btn btn-primary" href="dashboard.html">View in My Account</a>
         <button class="btn btn-secondary" onclick="closeCheckoutModal()">
           Close Window
         </button>
@@ -1605,6 +1466,9 @@
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
   <!-- SCRIPT -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="app.js"></script>
+  <script src="api-client.js"></script>
+  <script src="account-nav.js"></script>
 </body>
 </html>

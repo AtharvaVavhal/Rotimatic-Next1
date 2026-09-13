@@ -6,8 +6,7 @@
  *  3. Asset 3: "In Real Indian Kitchens" Lifestyle Showcase
  *  4. Real HTML5 Video Player with Scroll-into-view Autoplay & Floating Unmute Pill
  *  5. Interactive Variant Switcher (Polar White ₹14,999 vs Onyx Black ₹24,999)
- *  6. Complete Dummy Checkout / Buy Now Modal (Client Demo Mock)
- *     // TODO: integrate real payment gateway once client provides merchant account (Razorpay/PayU/Stripe)
+ *  6. Checkout flow that creates real pending orders through the backend
  */
 
 // Global State
@@ -16,13 +15,8 @@ const appState = {
   heroMode: 'spotlight', // 'spotlight' | '360'
   quantity: 1,
   current360Frame: 1,
-  customer: {
-    name: 'Rahul Sharma',
-    phone: '9876543210',
-    address: 'Flat 402, Lotus Grand, Link Road',
-    city: 'Mumbai',
-    pin: '400050'
-  },
+  checkoutAddresses: [],
+  createdOrder: null,
   selectedPaymentMethod: 'upi',
   variants: {
     black: {
@@ -435,6 +429,7 @@ function openCheckoutModal(variantKey = null) {
   if (!modal) return;
 
   goToCheckoutStep(1);
+  loadCheckoutAddresses();
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -484,7 +479,7 @@ function updateCheckoutSummary() {
   const qty = appState.quantity;
   const unitPrice = variant.price;
   const subtotal = unitPrice * qty;
-  const gstAmount = Math.round(subtotal - (subtotal / 1.18));
+  const taxAmount = 0;
 
   // Update summary preview
   const thumb = document.getElementById('summaryThumb');
@@ -500,7 +495,7 @@ function updateCheckoutSummary() {
   if (qtyEl) qtyEl.textContent = qty;
   if (singlePriceEl) singlePriceEl.textContent = `₹${unitPrice.toLocaleString('en-IN')} each`;
   if (subtotalEl) subtotalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
-  if (gstEl) gstEl.textContent = `₹${gstAmount.toLocaleString('en-IN')}`;
+  if (gstEl) gstEl.textContent = `₹${taxAmount.toLocaleString('en-IN')}`;
   if (totalEl) totalEl.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
 
   document.querySelectorAll('.payTotalDisplay').forEach(el => {
@@ -511,21 +506,72 @@ function updateCheckoutSummary() {
   document.querySelectorAll('.payHalfDisplay').forEach(el => {
     el.textContent = `₹${halfPrice.toLocaleString('en-IN')}`;
   });
+
+  const reviewProduct = document.getElementById('reviewProductName');
+  const reviewQuantity = document.getElementById('reviewQuantity');
+  const reviewTotal = document.getElementById('reviewTotal');
+  if (reviewProduct) reviewProduct.textContent = variant.name;
+  if (reviewQuantity) reviewQuantity.textContent = qty;
+  if (reviewTotal) reviewTotal.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
 }
 
-function goToCheckoutStep(stepNumber) {
-  if (stepNumber === 2) {
-    const nameInput = document.getElementById('custName');
-    const phoneInput = document.getElementById('custPhone');
-    const addrInput = document.getElementById('custAddress');
-    const cityInput = document.getElementById('custCity');
-    const pinInput = document.getElementById('custPin');
+async function loadCheckoutAddresses() {
+  const select = document.getElementById('checkoutAddressSelect');
+  const message = document.getElementById('checkoutAddressMessage');
+  if (!select || !window.RotimaticApi) return;
 
-    if (nameInput && nameInput.value.trim()) appState.customer.name = nameInput.value.trim();
-    if (phoneInput && phoneInput.value.trim()) appState.customer.phone = phoneInput.value.trim();
-    if (addrInput && addrInput.value.trim()) appState.customer.address = addrInput.value.trim();
-    if (cityInput && cityInput.value.trim()) appState.customer.city = cityInput.value.trim();
-    if (pinInput && pinInput.value.trim()) appState.customer.pin = pinInput.value.trim();
+  select.disabled = true;
+  select.innerHTML = '<option value="">Loading saved addresses...</option>';
+  if (message) message.textContent = '';
+  try {
+    const response = await RotimaticApi.addresses();
+    appState.checkoutAddresses = response.data.addresses || [];
+    select.innerHTML = '';
+    if (!appState.checkoutAddresses.length) {
+      select.innerHTML = '<option value="">No saved addresses</option>';
+      if (message) message.innerHTML = 'Add a saved address in <a href="dashboard.html">My Account</a> before creating an order.';
+      return;
+    }
+    appState.checkoutAddresses.forEach(address => {
+      const option = document.createElement('option');
+      option.value = address.id;
+      option.textContent = `${address.fullName} — ${[address.addressLine1, address.city, address.postalCode].filter(Boolean).join(', ')}`;
+      select.appendChild(option);
+    });
+    const defaultAddress = appState.checkoutAddresses.find(address => address.isDefault);
+    select.value = (defaultAddress || appState.checkoutAddresses[0]).id;
+  } catch (error) {
+    if (error.status === 401) {
+      window.location.href = 'login.html';
+      return;
+    }
+    select.innerHTML = '<option value="">Unable to load addresses</option>';
+    if (message) message.textContent = 'We could not load your saved addresses. Please try again.';
+  } finally {
+    select.disabled = false;
+  }
+}
+
+async function goToCheckoutStep(stepNumber) {
+  if (stepNumber === 2) {
+    const select = document.getElementById('checkoutAddressSelect');
+    if (!select || !select.value) {
+      const message = document.getElementById('checkoutAddressMessage');
+      if (message) message.textContent = 'Select a saved address before continuing.';
+      return;
+    }
+
+    try {
+      const response = await RotimaticApi.me();
+      if (!response.data.authenticated) {
+        window.location.href = 'login.html';
+        return;
+      }
+    } catch (error) {
+      if (error.status === 401) window.location.href = 'login.html';
+      else showToast('We could not verify your session. Please try again.', 'orange');
+      return;
+    }
   }
 
   [1, 2, 3].forEach(num => {
@@ -549,50 +595,144 @@ function switchPayTab(tabKey) {
   });
 }
 
-/**
- * DUMMY PAYMENT GATEWAY PROCESSOR (CLIENT DEMO)
- * NOTE: Payment gateway is completely mocked for client review.
- * // TODO: integrate real payment gateway once client provides merchant account (Razorpay/PayU/Stripe)
- */
-function processDummyPayment() {
+function renderOrderConfirmation(order, paymentState = 'pending') {
+  const variant = appState.variants[appState.currentVariant];
+  const orderIdEl = document.getElementById('confOrderId');
+  const variantEl = document.getElementById('confVariant');
+  const totalEl = document.getElementById('confTotal');
+  const destEl = document.getElementById('confDestination');
+  const statusEl = document.getElementById('confStatus');
+  const currencyEl = document.getElementById('confCurrency');
+  const titleEl = document.querySelector('#checkoutStep3 .conf-title');
+  const subtitleEl = document.querySelector('#checkoutStep3 .conf-subtitle');
+  if (titleEl) titleEl.textContent = paymentState === 'confirmed' ? 'Payment confirmed.' : 'Order created.';
+  if (subtitleEl) subtitleEl.textContent = paymentState === 'confirmed'
+    ? 'Your payment was verified and your order is confirmed.'
+    : 'Your order is saved, but payment is still pending.';
+  if (orderIdEl) orderIdEl.textContent = order.orderNumber;
+  if (variantEl) variantEl.textContent = `${variant.name} (${order.items[0].quantity} Unit${order.items[0].quantity > 1 ? 's' : ''})`;
+  if (totalEl) totalEl.textContent = `₹${Number(order.totalAmount).toLocaleString('en-IN')} (${paymentState === 'confirmed' ? 'paid' : 'pending payment'})`;
+  if (destEl) destEl.textContent = `${order.shippingAddress.city}, ${order.shippingAddress.state} (${order.shippingAddress.postalCode})`;
+  if (statusEl) statusEl.textContent = paymentState === 'confirmed' ? 'Confirmed' : 'Pending payment';
+  if (currencyEl) currencyEl.textContent = order.currency;
+}
+
+async function openRazorpayCheckout(order, payment) {
+  if (!window.Razorpay) {
+    renderOrderConfirmation(order);
+    goToCheckoutStep(3);
+    showToast('Payment checkout is unavailable. Your order remains pending.', 'orange');
+    return;
+  }
+
+  const selectedAddress = appState.checkoutAddresses.find(address => address.id === document.getElementById('checkoutAddressSelect').value);
+  let userResponse;
+  try {
+    userResponse = await RotimaticApi.me();
+  } catch (error) {
+    if (error.status === 401) window.location.href = 'login.html';
+    else showToast('We could not load your checkout details.', 'orange');
+    return;
+  }
+
+  const options = {
+    key: payment.keyId,
+    amount: payment.amount,
+    currency: payment.currency,
+    name: 'Rotimatic NEXT',
+    description: `Order ${order.orderNumber}`,
+    order_id: payment.razorpayOrderId,
+    prefill: {
+      name: selectedAddress ? selectedAddress.fullName : `${userResponse.data.user.firstName} ${userResponse.data.user.lastName}`,
+      email: userResponse.data.user.email,
+      contact: selectedAddress ? selectedAddress.phone : userResponse.data.user.phone,
+    },
+    notes: { localOrderId: order.id },
+    handler: async (response) => {
+      try {
+        const verified = await RotimaticApi.verifyPayment({
+          orderId: order.id,
+          razorpayOrderId: response.razorpay_order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpaySignature: response.razorpay_signature,
+        });
+        const paymentResult = verified.data.payment;
+        if (paymentResult.status === 'captured' && paymentResult.orderStatus === 'confirmed') {
+          renderOrderConfirmation({ ...order, status: 'confirmed' }, 'confirmed');
+          goToCheckoutStep(3);
+          showToast('Payment verified and order confirmed.', 'orange');
+        } else {
+          renderOrderConfirmation(order);
+          goToCheckoutStep(3);
+          showToast('Payment is not captured. Your order remains pending.', 'orange');
+        }
+      } catch (error) {
+        renderOrderConfirmation(order);
+        goToCheckoutStep(3);
+        showToast(error.status === 400 ? 'Payment verification failed. Your order remains pending.' : 'We could not verify the payment yet.', 'orange');
+      }
+    },
+    modal: {
+      ondismiss: () => {
+        renderOrderConfirmation(order);
+        goToCheckoutStep(3);
+        showToast('Checkout closed. Your order remains pending payment.', 'orange');
+      },
+    },
+  };
+
+  try {
+    const checkout = new window.Razorpay(options);
+    checkout.on('payment.failed', () => {
+      renderOrderConfirmation(order);
+      goToCheckoutStep(3);
+      showToast('Payment failed. Your order remains pending.', 'orange');
+    });
+    checkout.open();
+  } catch (error) {
+    renderOrderConfirmation(order);
+    goToCheckoutStep(3);
+    showToast('Payment checkout could not be opened. Your order remains pending.', 'orange');
+  }
+}
+
+async function processRealOrder() {
   const placeBtn = document.getElementById('placeOrderBtn');
   if (!placeBtn) return;
 
   const origHtml = placeBtn.innerHTML;
+  let createdOrder = null;
   placeBtn.disabled = true;
-  placeBtn.innerHTML = `<span>Processing Order...</span>`;
+  placeBtn.innerHTML = '<span>Creating order...</span>';
 
-  setTimeout(() => {
+  try {
+    const select = document.getElementById('checkoutAddressSelect');
+    const response = await RotimaticApi.createOrder({
+      variant: appState.currentVariant,
+      quantity: appState.quantity,
+      addressId: select.value,
+    });
+    const order = response.data.order;
+    createdOrder = order;
+    appState.createdOrder = order;
+    const paymentResponse = await RotimaticApi.createPaymentOrder({ orderId: order.id });
+    await openRazorpayCheckout(order, paymentResponse.data.payment);
+  } catch (error) {
+    if (error.status === 401) {
+      window.location.href = 'login.html';
+    } else if (error.status === 404) {
+      showToast('That saved address is no longer available. Refresh your addresses.', 'orange');
+    } else if (createdOrder) {
+      renderOrderConfirmation(createdOrder);
+      goToCheckoutStep(3);
+      showToast('Order created, but payment could not be started. Your order remains pending.', 'orange');
+    } else {
+      showToast(error.status >= 500 ? 'We could not create the order. Please try again.' : error.message, 'orange');
+    }
+  } finally {
     placeBtn.disabled = false;
     placeBtn.innerHTML = origHtml;
-
-    const randomOrderId = '#ROTI-2026-' + Math.floor(1000 + Math.random() * 9000);
-    const variant = appState.variants[appState.currentVariant];
-    const total = (variant.price * appState.quantity).toLocaleString('en-IN');
-
-    const nameEl = document.getElementById('confCustomerName');
-    const orderIdEl = document.getElementById('confOrderId');
-    const variantEl = document.getElementById('confVariant');
-    const totalEl = document.getElementById('confTotal');
-    const destEl = document.getElementById('confDestination');
-    const waBtn = document.getElementById('confWhatsAppBtn');
-
-    if (nameEl) nameEl.textContent = appState.customer.name;
-    if (orderIdEl) orderIdEl.textContent = randomOrderId;
-    if (variantEl) variantEl.textContent = `${variant.name} (${appState.quantity} Unit${appState.quantity > 1 ? 's' : ''})`;
-    if (totalEl) totalEl.textContent = `₹${total} (Inclusive of 18% GST)`;
-    if (destEl) destEl.textContent = `${appState.customer.city} (${appState.customer.pin})`;
-
-    if (waBtn) {
-      const waMsg = encodeURIComponent(
-        `Hi Rotimatic Team, I have placed order ${randomOrderId} for ${variant.name} (Qty: ${appState.quantity}) to ${appState.customer.city}. Please confirm dispatch timeline.`
-      );
-      waBtn.href = `https://wa.me/919876543210?text=${waMsg}`;
-    }
-
-    goToCheckoutStep(3);
-    showToast('🎉 Booking Confirmed Successfully!', 'orange');
-  }, 1100);
+  }
 }
 
 /* ==========================================================================

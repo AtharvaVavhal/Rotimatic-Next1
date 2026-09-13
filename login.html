@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In | Rotimatic NEXT</title>
+  <meta name="description" content="Log in to your Rotimatic NEXT account." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="account-page">
+  <main class="auth-shell">
+    <a class="auth-brand" href="index.html" aria-label="Rotimatic NEXT home">
+      <span class="auth-logo-mark">R</span>
+      <span>ROTIMATIC <small>NEXT</small></span>
+    </a>
+    <section class="auth-panel" aria-labelledby="loginTitle">
+      <div class="auth-panel-heading">
+        <span class="section-kicker">Account access</span>
+        <h1 id="loginTitle">Welcome back.</h1>
+        <p>Sign in to manage your Rotimatic account and saved addresses.</p>
+      </div>
+      <div class="form-message" id="loginMessage" role="alert" aria-live="polite"></div>
+      <form id="loginForm" novalidate>
+        <div class="account-form-field">
+          <label for="loginEmail">Email address</label>
+          <input id="loginEmail" name="email" type="email" autocomplete="email" required />
+        </div>
+        <div class="account-form-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" name="password" type="password" autocomplete="current-password" required />
+        </div>
+        <button class="btn btn-primary btn-block" id="loginSubmit" type="submit">Log in</button>
+      </form>
+      <p class="auth-switch">New to Rotimatic? <a href="signup.html">Create an account</a></p>
+      <a class="auth-back-link" href="index.html">← Back to Rotimatic NEXT</a>
+    </section>
+  </main>
+  <script src="api-client.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>
