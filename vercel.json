@@ -1,5 +1,8 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "rotimatic-next1-production.up.railway.app/api/$1" }
+    {
+      "source": "/api/:path*",
+      "destination": "https://rotimatic-next1-production.up.railway.app/api/:path*"
+    }
   ]
 }
