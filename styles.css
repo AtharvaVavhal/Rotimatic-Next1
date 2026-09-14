@@ -1,5 +1,5 @@
 /* ==========================================================================
-   ROTIMATIC NEXT — PREMIUM INDUSTRIAL MACHINERY STYLESHEET
+   ROTIMATIC NEXT — STYLESHEET
    Brand Colors: Warm Cream/Ivory + Terracotta Orange + Espresso Brown
    Aesthetic: Warm Organic Luxury Showroom — Clean, Authoritative, Professional
    ========================================================================== */
@@ -306,45 +306,6 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 1.25rem;
-}
-
-.banner-badge {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-weight: 800;
-  font-size: 0.66rem;
-  letter-spacing: 0.1em;
-  color: var(--gold);
-  background: var(--gold-bg);
-  padding: 0.2rem 0.65rem;
-  border-radius: var(--r-pill);
-  border: 1px solid rgba(227, 167, 62, 0.35);
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.pulse-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 7px var(--gold);
-  animation: pulseDot 1.8s infinite ease-in-out;
-}
-
-@keyframes pulseDot {
-
-  0%,
-  100% {
-    transform: scale(0.9);
-    opacity: 0.7;
-  }
-
-  50% {
-    transform: scale(1.5);
-    opacity: 1;
-  }
 }
 
 .banner-ticker {
@@ -863,27 +824,24 @@ body.menu-open {
   border: 1.5px solid var(--orange);
 }
 
-/* Mode Switcher */
+/* Mode Switcher — a lighter, secondary-tier control under the variant switch */
 .hero-mode-switcher {
   display: inline-flex;
-  background: rgba(246, 238, 223, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(246, 238, 223, 0.88);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-pill);
-  padding: 3px;
-  gap: 3px;
-  box-shadow: 0 4px 14px rgba(43, 36, 32, 0.08);
+  padding: 2px;
+  gap: 2px;
 }
 
 .mode-pill-btn {
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.45rem 0.95rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  padding: 0.36rem 0.85rem;
   border-radius: var(--r-pill);
   border: 1px solid transparent;
   background: transparent;
-  color: var(--text-secondary);
+  color: var(--text-muted);
   transition: all var(--t-fast);
   cursor: pointer;
 }
@@ -893,10 +851,9 @@ body.menu-open {
 }
 
 .mode-pill-btn.active {
-  background: var(--orange);
-  color: #ffffff;
-  border-color: var(--orange);
-  box-shadow: 0 2px 8px rgba(168, 92, 50, 0.3);
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border-color: var(--border-subtle);
 }
 
 /* Product 3D Card */
@@ -907,11 +864,6 @@ body.menu-open {
   border-radius: var(--r-xl);
   transform-style: preserve-3d;
   transition: transform 0.15s ease-out;
-  cursor: grab;
-}
-
-.product-3d-card:active {
-  cursor: grabbing;
 }
 
 /* Spotlight View */
@@ -951,56 +903,16 @@ body.menu-open {
   position: relative;
   border-radius: var(--r-xl);
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 35%, #FFFFFF 0%, #FAF5EC 65%, #EFE5D3 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 35%, rgba(43, 36, 32, 0.03) 100%);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
-  box-shadow:
-    0 20px 50px -10px rgba(43, 36, 32, 0.12),
-    0 0 40px -10px rgba(168, 92, 50, 0.08),
-    inset 0 1px 0 #ffffff;
+  box-shadow: var(--shadow-xl);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 0.6rem;
   min-height: 420px;
   padding: 1.5rem;
-  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Countertop reflection plane grounding the machine */
-.spotlight-frame::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 6%;
-  right: 6%;
-  height: 52px;
-  background: radial-gradient(ellipse at 50% 100%, rgba(43, 36, 32, 0.08) 0%, rgba(43, 36, 32, 0.02) 45%, transparent 75%);
-  border-top: 1px solid var(--border-subtle);
-  pointer-events: none;
-  border-radius: 50% 50% 0 0 / 14px 14px 0 0;
-}
-
-.spotlight-frame.is-white-machine {
-  background:
-    radial-gradient(ellipse at 50% 35%, #FFFFFF 0%, #FAF5EC 65%, #EFE5D3 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 35%, rgba(43, 36, 32, 0.03) 100%);
-  border-color: var(--border-subtle);
-  box-shadow:
-    0 20px 50px -10px rgba(43, 36, 32, 0.12),
-    0 0 40px -10px rgba(168, 92, 50, 0.06),
-    inset 0 1px 0 #ffffff;
-}
-
-.spotlight-frame.is-black-machine {
-  background:
-    radial-gradient(ellipse at 50% 35%, #FFFFFF 0%, #FAF5EC 65%, #E8DCC8 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 35%, rgba(43, 36, 32, 0.04) 100%);
-  border-color: var(--border-subtle);
-  box-shadow:
-    0 20px 50px -10px rgba(43, 36, 32, 0.12),
-    0 0 40px -10px rgba(168, 92, 50, 0.08),
-    inset 0 1px 0 #ffffff;
 }
 
 .product-render-dramatic {
@@ -1014,33 +926,11 @@ body.menu-open {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.product-badge-float {
-  position: absolute;
-  bottom: 1.1rem;
-  left: 1.1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  background: var(--bg-dark-section);
-  backdrop-filter: blur(16px);
-  padding: 0.42rem 0.95rem;
-  border-radius: var(--r-pill);
-  border: 1px solid var(--border-subtle);
-  font-size: 0.74rem;
-  z-index: 6;
-  pointer-events: none;
-}
-
-.live-tag {
-  color: var(--gold);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-
-.badge-text {
-  color: var(--text-inverse);
+.product-caption {
+  text-align: center;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: var(--text-secondary);
 }
 
 /* 360 Viewer */
@@ -1048,14 +938,9 @@ body.menu-open {
   position: relative;
   border-radius: var(--r-xl);
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 50% 35%, #FFFFFF 0%, #FAF5EC 65%, #EFE5D3 100%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 35%, rgba(43, 36, 32, 0.03) 100%);
+  background: var(--bg-surface-elevated);
   border: 1px solid var(--border-subtle);
-  box-shadow:
-    0 20px 50px -10px rgba(43, 36, 32, 0.12),
-    0 0 40px -10px rgba(168, 92, 50, 0.08),
-    inset 0 1px 0 #ffffff;
+  box-shadow: var(--shadow-xl);
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
@@ -1078,10 +963,7 @@ body.menu-open {
 .viewer-360-container.is-dragging {
   cursor: grabbing !important;
   border-color: var(--orange);
-  box-shadow:
-    0 24px 55px -10px rgba(43, 36, 32, 0.18),
-    0 0 30px rgba(168, 92, 50, 0.18),
-    inset 0 1px 0 #ffffff;
+  box-shadow: var(--glow-orange-lg);
 }
 
 .product-render-360 {
@@ -1187,17 +1069,6 @@ body.menu-open {
   border-radius: 4px;
 }
 
-.stage-pedestal-shadow {
-  position: absolute;
-  bottom: -20px;
-  left: 10%;
-  right: 10%;
-  height: 36px;
-  background: radial-gradient(ellipse at center, rgba(43, 36, 32, 0.20) 0%, transparent 75%);
-  filter: blur(12px);
-  z-index: -1;
-}
-
 /* Scroll Hint */
 .scroll-down-hint {
   display: flex;
@@ -1234,7 +1105,12 @@ body.menu-open {
   height: 7px;
   background: var(--orange);
   border-radius: 2px;
-  animation: mouseScroll 1.8s infinite ease-in-out;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .mouse-icon .wheel {
+    animation: mouseScroll 1.8s infinite ease-in-out;
+  }
 }
 
 @keyframes mouseScroll {
@@ -2168,20 +2044,6 @@ body.menu-open {
   display: block;
 }
 
-.lifestyle-floating-badge {
-  position: absolute;
-  bottom: 1.1rem;
-  left: 1.1rem;
-  background: var(--bg-dark-section);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--r-pill);
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--text-inverse);
-}
-
 .lifestyle-text-col {
   padding: 2.5rem 2.5rem 2.5rem 0;
 }
@@ -2520,11 +2382,6 @@ body.menu-open {
   flex-shrink: 0;
 }
 
-.secure-checkout-hint {
-  font-size: 0.75rem;
-  color: var(--border-subtle);
-  text-align: center;
-}
 
 /* ==========================================================================
    FOOTER (Dark Section)
@@ -3362,34 +3219,6 @@ body.menu-open {
   flex-wrap: wrap;
 }
 
-/* Header & Banner Action Elements */
-.banner-helpline-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.76rem;
-  font-weight: 700;
-  color: #F6EEDF;
-  background: rgba(246, 238, 223, 0.12);
-  padding: 0.28rem 0.75rem;
-  border-radius: var(--r-pill);
-  border: 1px solid rgba(201, 187, 160, 0.45);
-  transition: all var(--t-fast);
-  text-decoration: none;
-}
-
-.banner-helpline-link .icon-svg {
-  stroke: #E3A73E;
-  color: #E3A73E;
-  flex-shrink: 0;
-}
-
-.banner-helpline-link:hover {
-  background: rgba(246, 238, 223, 0.24);
-  color: #FFFFFF;
-  border-color: #FFFFFF;
-}
-
 .nav-cta-btn {
   display: inline-flex;
   align-items: center;
@@ -3429,21 +3258,25 @@ body.menu-open {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background: rgba(34, 197, 94, 0.14);
-  border: 1px solid rgba(34, 197, 94, 0.4);
-  color: #4ade80;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
   font-size: 0.92rem;
-  font-weight: 700;
+  font-weight: 600;
   padding: 0.75rem 1.25rem;
-  border-radius: var(--r-md);
+  border-radius: var(--r-pill);
   transition: all var(--t-fast);
   cursor: pointer;
 }
 
+.btn-whatsapp-hero svg {
+  color: #16a34a;
+}
+
 .btn-whatsapp-hero:hover {
-  background: rgba(34, 197, 94, 0.25);
-  border-color: #4ade80;
-  color: #fff;
+  background: rgba(22, 163, 74, 0.08);
+  border-color: #16a34a;
+  color: var(--text-primary);
 }
 
 .badge-saving {
@@ -3470,7 +3303,7 @@ body.menu-open {
   gap: 0.45rem;
 }
 
-/* Floating Industrial Action Dock */
+/* Floating Contact Dock */
 .floating-contact-dock {
   position: fixed;
   bottom: 2rem;
@@ -3544,7 +3377,7 @@ body.menu-open {
   transform: translateX(0);
 }
 
-/* Machinery Commercial Enquiry Modal */
+/* Product Enquiry Modal */
 .enquiry-modal-container {
   background: #FFFFFF;
   border: 1px solid var(--border-subtle);
@@ -3655,7 +3488,29 @@ body.menu-open {
   }
 
   .hero-text-content {
-    max-width: 100%;
+    /* Capped rather than 100%: past this width the copy runs into the
+       less-covered part of the diagonal background veil, where the photo
+       shows through more and text contrast drops. */
+    max-width: 620px;
+  }
+
+  /* Single-column layout puts the copy over a wider share of the showroom
+     photo than the two-column desktop layout does, so the veil needs to
+     stay opaque further across to keep text contrast readable. */
+  .hero-section {
+    background-image:
+      linear-gradient(108deg,
+        rgba(246, 238, 223, 0.97) 0%,
+        rgba(246, 238, 223, 0.95) 50%,
+        rgba(246, 238, 223, 0.85) 68%,
+        rgba(246, 238, 223, 0.42) 82%,
+        transparent 94%),
+      linear-gradient(111deg,
+        transparent 37%,
+        rgba(201, 187, 160, 0.3) 38%,
+        rgba(201, 187, 160, 0.1) 39%,
+        transparent 41%),
+      url('assets/showroom-stage-bg.jpg');
   }
 
   .hero-3d-stage {
@@ -4031,10 +3886,6 @@ body.menu-open {
   .cta-perks {
     flex-direction: column;
     gap: 0.5rem;
-  }
-
-  .banner-badge {
-    display: none;
   }
 
   .banner-helpline-link span,

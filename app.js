@@ -28,7 +28,7 @@ const appState = {
       originalPrice: 32999,
       savings: 8000,
       image: 'assets/machine-black-24k.jpg',
-      badge: '5 Year Priority Warranty • Verified Blueprint Specs',
+      badge: '5 Year Priority Warranty • Flagship Edition',
       summary: 'Rotimatic NEXT Black Edition (1 Unit)'
     },
     white: {
@@ -99,13 +99,12 @@ function setHeroViewMode(mode) {
     btn360.classList.remove('active');
     viewSpotlight.classList.add('active');
     view360.classList.remove('active');
-    showToast('✨ Switched to Studio Spotlight View', 'orange');
   } else {
     btn360.classList.add('active');
     btnSpotlight.classList.remove('active');
     view360.classList.add('active');
     viewSpotlight.classList.remove('active');
-    showToast('🔄 Drag horizontally to spin 360°', 'orange');
+    showToast('Drag horizontally, or use ← → keys, to rotate', 'orange');
   }
 }
 
@@ -116,6 +115,8 @@ function init360Viewer() {
   const container = document.getElementById('viewer360Container');
   const turnaroundImg = document.getElementById('turnaroundImg');
   if (!container || !turnaroundImg) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   let isDragging = false;
   let accumulatedDelta = 0;
@@ -166,8 +167,8 @@ function init360Viewer() {
     isDragging = false;
     container.classList.remove('is-dragging');
 
-    // Smooth inertial momentum on release
-    if (Math.abs(velocity) > 3) {
+    // Smooth inertial momentum on release (skipped under reduced-motion; direct drag still works)
+    if (!prefersReducedMotion && Math.abs(velocity) > 3) {
       let currentVelocity = velocity;
       function applyMomentum() {
         if (isDragging) return;
@@ -297,6 +298,9 @@ function init3DHeroTilt() {
   const card = document.getElementById('product3DCard');
   if (!stage || !card) return;
 
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return; // Skip ambient tilt/parallax; the 360 drag interaction is unaffected
+
   let isHovered = false;
 
   stage.addEventListener('mouseenter', () => {
@@ -309,7 +313,7 @@ function init3DHeroTilt() {
   });
 
   stage.addEventListener('mousemove', (e) => {
-    if (!isHovered || appState.heroMode === '360') return; // Tilt in spotlight mode
+    if (!isHovered || appState.heroMode === '360') return; // Tilt in spotlight mode only
 
     const rect = stage.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -318,10 +322,10 @@ function init3DHeroTilt() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = -((y - centerY) / centerY) * 12;
-    const rotateY = ((x - centerX) / centerX) * 14;
+    const rotateX = -((y - centerY) / centerY) * 8;
+    const rotateY = ((x - centerX) / centerX) * 10;
 
-    card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+    card.style.transform = `perspective(1200px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.015, 1.015, 1.015)`;
   });
 
   // Window scroll subtle parallax
@@ -372,12 +376,12 @@ function toggleVideoSound() {
     video.play().catch(() => { });
     if (icon) icon.textContent = '🔇';
     if (text) text.textContent = 'Mute Audio';
-    showToast('🔊 Audio Unmuted');
+    showToast('Audio unmuted');
   } else {
     video.muted = true;
     if (icon) icon.textContent = '🔊';
     if (text) text.textContent = 'Click for Sound';
-    showToast('🔇 Audio Muted');
+    showToast('Audio muted');
   }
 }
 
@@ -394,7 +398,6 @@ function selectVariant(variantKey, triggerToast = true) {
   const heroDot = document.getElementById('heroVariantDot');
   const heroTitle = document.getElementById('heroVariantTitle');
   const heroPrice = document.getElementById('heroPriceTag');
-  const spotlightFrame = document.querySelector('.spotlight-frame');
   const spotlightBadgeText = document.getElementById('spotlightBadgeText');
 
   if (heroImg) {
@@ -406,15 +409,10 @@ function selectVariant(variantKey, triggerToast = true) {
     }, 150);
   }
 
-  if (spotlightFrame) {
-    spotlightFrame.classList.toggle('is-white-machine', variantKey === 'white');
-    spotlightFrame.classList.toggle('is-black-machine', variantKey === 'black');
-  }
-
   if (spotlightBadgeText) {
     spotlightBadgeText.textContent = variantKey === 'white'
-      ? 'Rotimatic Classic White (₹14,999)'
-      : 'Rotimatic NEXT Black Edition (₹24,999)';
+      ? 'Rotimatic Classic White'
+      : 'Rotimatic NEXT — Black Edition';
   }
 
   // Update Stage Machine Switcher Buttons if present
@@ -1030,7 +1028,7 @@ function showToast(message, type = '') {
 
   const toast = document.createElement('div');
   toast.className = `toast-msg ${type}`;
-  toast.innerHTML = `<span>✨</span><span>${message}</span>`;
+  toast.textContent = message;
   container.appendChild(toast);
 
   setTimeout(() => {
@@ -1080,17 +1078,8 @@ function handleEnquiryVariantChange() {
 
 function submitEnquiryForm(e) {
   if (e) e.preventDefault();
-  const name = (document.getElementById('enqName')?.value || 'Valued Customer').trim();
-  const phone = (document.getElementById('enqPhone')?.value || '').trim();
-  const city = (document.getElementById('enqCity')?.value || '').trim();
-  const productKey = document.getElementById('enquiryProductSelect')?.value || appState.currentVariant;
-  const variant = appState.variants[productKey] || appState.variants.black;
-  const message = (document.getElementById('enqMessage')?.value || '').trim();
-
-  const ticketId = 'ENQ-' + Math.floor(100000 + Math.random() * 900000);
-
   closeEnquiryModal();
-  showToast(`✅ Enquiry ${ticketId} received for ${variant.name}! Our representative will call within 2 business hours.`, 'orange');
+  showToast('Enquiry noted. For a faster reply, message us on WhatsApp.', 'orange');
 }
 
 function sendWhatsAppEnquiry(variantKey = null) {
@@ -1103,7 +1092,7 @@ function sendWhatsAppEnquiry(variantKey = null) {
 }
 
 function handleGoogleReviewAction() {
-  showToast('⭐ Opening Google Verified Reviews & Ratings...', 'orange');
+  showToast('Opening customer reviews...', 'orange');
   const reviewTarget = document.getElementById('reviews');
   if (reviewTarget) {
     reviewTarget.scrollIntoView({ behavior: 'smooth' });
