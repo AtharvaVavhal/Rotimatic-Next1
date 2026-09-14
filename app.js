@@ -995,7 +995,7 @@ function sendWhatsAppEnquiry(variantKey = null) {
   const text = encodeURIComponent(
     `Hello Rotimatic Team, I would like to make an enquiry regarding the ${variant.name} (₹${variant.price.toLocaleString('en-IN')}). Please provide product catalogue, commercial quotation and dispatch timelines.`
   );
-  window.open(`https://wa.me/919876543210?text=${text}`, '_blank', 'noopener,noreferrer');
+  window.open(`https://wa.me/917413838893?text=${text}`, '_blank', 'noopener,noreferrer');
 }
 
 function handleGoogleReviewAction() {
