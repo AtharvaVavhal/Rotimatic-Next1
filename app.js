@@ -291,7 +291,7 @@ function toggleVideoSound() {
 
   if (video.muted) {
     video.muted = false;
-    video.play().catch(() => {});
+    video.play().catch(() => { });
     if (icon) icon.textContent = '🔇';
     if (text) text.textContent = 'Mute Audio';
     showToast('🔊 Audio Unmuted');
@@ -334,8 +334,8 @@ function selectVariant(variantKey, triggerToast = true) {
   }
 
   if (spotlightBadgeText) {
-    spotlightBadgeText.textContent = variantKey === 'white' 
-      ? 'Rotimatic Classic White (₹14,999)' 
+    spotlightBadgeText.textContent = variantKey === 'white'
+      ? 'Rotimatic Classic White (₹14,999)'
       : 'Rotimatic NEXT Black Edition (₹24,999)';
   }
 
@@ -984,7 +984,7 @@ function submitEnquiryForm(e) {
   const message = (document.getElementById('enqMessage')?.value || '').trim();
 
   const ticketId = 'ENQ-' + Math.floor(100000 + Math.random() * 900000);
-  
+
   closeEnquiryModal();
   showToast(`✅ Enquiry ${ticketId} received for ${variant.name}! Our representative will call within 2 business hours.`, 'orange');
 }
