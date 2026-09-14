@@ -2594,6 +2594,19 @@ button {
 
 .footer-logo {
   margin-bottom: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.footer-logo .brand-name,
+.site-footer .brand-name {
+  color: #F6EEDF;
+}
+
+.footer-logo:hover .brand-name {
+  color: #FFFFFF;
 }
 
 .footer-tagline {
