@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=20260914-6" />
+  <link rel="stylesheet" href="styles.css?v=20260914-8" />
 </head>
 <body>
   <!-- 7. TOP OFFERS BANNER STRIP -->
@@ -70,6 +70,18 @@
         <a href="#howItWorks" class="nav-link">How It Works</a>
         <a href="#specs" class="nav-link">Specs</a>
         <a href="#reviews" class="nav-link">Reviews</a>
+        <div class="nav-drawer-actions">
+          <a href="login.html" class="nav-drawer-account">
+            <svg class="nav-account-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span>My Account / Login</span>
+          </a>
+          <button class="btn btn-primary btn-block nav-drawer-cta" onclick="openCheckoutModal()" type="button">
+            Buy Now →
+          </button>
+        </div>
       </div>
 
       <div class="nav-actions">
@@ -734,6 +746,10 @@
               </div>
             </div>
           </div>
+        </div>
+
+        <div class="table-scroll-hint" aria-hidden="true">
+          <span>⇄ Swipe horizontally to compare models</span>
         </div>
 
         <div class="specs-table-wrapper">
