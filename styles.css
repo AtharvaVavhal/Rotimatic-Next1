@@ -75,6 +75,14 @@
 /* ─── Reset & Base ─────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* The site toggles visibility via the `hidden` attribute/property throughout
+   (app.js, dashboard.js, admin.js). Without this, any element that also
+   matches an author rule setting `display` (e.g. `display: flex`) stays
+   visible when hidden, because author styles beat the UA default
+   `[hidden] { display: none }`. This one rule keeps `.hidden = true/false`
+   authoritative everywhere, regardless of what other display rules exist. */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -342,6 +350,11 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   align-items: center;
   justify-content: space-between;
   height: 68px;
+  /* Wider than the shared .container cap (1240px): the full nav (logo +
+     7 links + actions) needs more room than the page's content sections
+     do, and only renders at all once .nav-links is visible above 1360px
+     (see the RESPONSIVE section), so this never affects narrower layouts. */
+  max-width: 1440px;
 }
 
 .brand-logo {
@@ -381,7 +394,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 1.85rem;
+  gap: 1.5rem;
 }
 
 .nav-link {
@@ -405,7 +418,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 1.1rem;
+  gap: 0.9rem;
 }
 
 .cart-btn {
@@ -1551,11 +1564,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
 
 .specs-table-wrapper {
+  position: relative;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--r-xl);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
   box-shadow: var(--shadow-md);
+  -webkit-overflow-scrolling: touch;
 }
 .specs-table { width: 100%; border-collapse: collapse; text-align: left; }
 .specs-table th, .specs-table td { padding: 1.1rem 1.65rem; border-bottom: 1px solid var(--border-faint); }
@@ -2127,6 +2144,31 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .cod-feature-points { display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.85rem; font-size: 0.8rem; color: var(--text-secondary); }
 .payment-action-buttons { display: flex; gap: 1rem; justify-content: flex-end; align-items: center; padding-top: 0.5rem; }
 
+/* Payment method selector (Razorpay vs. UPI/QR) */
+.payment-method-selector { display: flex; flex-direction: column; gap: 0.65rem; margin-bottom: 0.75rem; }
+.payment-method-option {
+  display: flex; align-items: center; gap: 0.75rem;
+  border: 1.5px solid var(--border-subtle);
+  border-radius: var(--r-lg);
+  padding: 0.85rem 1.1rem;
+  cursor: pointer;
+  transition: all var(--t-fast);
+  font-size: 0.88rem; font-weight: 700; color: var(--text-primary);
+}
+.payment-method-option:hover { border-color: var(--border-medium); }
+.payment-method-option:has(input:checked) {
+  border-color: var(--border-orange);
+  background: linear-gradient(90deg, rgba(255,138,0,0.06), transparent);
+  color: var(--text-white);
+}
+.payment-method-option input[type="radio"] { accent-color: var(--orange); width: 17px; height: 17px; flex-shrink: 0; }
+.payment-method-option:has(input:disabled) { opacity: 0.5; cursor: not-allowed; }
+
+/* Scan & Pay (manual UPI/QR) */
+.qr-payment-box { display: flex; gap: 1.5rem; align-items: center; flex-wrap: wrap; background: var(--bg-surface-2); border: 1px solid var(--border-faint); border-radius: var(--r-xl); padding: 1.5rem; margin-bottom: 1.25rem; }
+.qr-payment-image { width: 148px; height: 148px; object-fit: contain; background: #fff; border-radius: var(--r-sm); padding: 6px; flex-shrink: 0; }
+.qr-payment-details { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 0.6rem; }
+
 /* Confirmation */
 .order-confirmation-wrap { padding: 3rem 2rem; text-align: center; }
 .conf-success-icon { margin-bottom: 1.5rem; display: flex; justify-content: center; }
@@ -2386,6 +2428,18 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
    RESPONSIVE — MOBILE
    ========================================================================== */
 @media (max-width: 1024px) {
+  /* The comparison table (two full variant columns) is wider than fits at
+     this size and scrolls horizontally within its own wrapper (no page
+     overflow) — this fade is just a visual hint that there's more to the
+     right, since the crop otherwise lands mid-word with no other cue. */
+  .specs-table-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 28px;
+    background: linear-gradient(to right, transparent, var(--bg-surface));
+    pointer-events: none;
+  }
   .hero-container { grid-template-columns: 1fr; gap: 2.5rem; }
   .hero-text-content { max-width: 100%; }
   .hero-3d-stage { min-height: 420px; }
@@ -2395,11 +2449,30 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .how-it-works-layout { grid-template-columns: 1fr; }
 }
 
-@media (max-width: 768px) {
-  .container { padding: 0 1.1rem; }
+/* The full nav (7 links + login/call/enquiry/buy actions) needs ~1335px of
+   content width, which the shared .container max-width (1240px, ~1184px
+   inner) never provides at any viewport size. Collapse to the hamburger
+   menu (same pattern already used below 768px) starting at 1360px instead,
+   so the nav never overflows the page regardless of window width. */
+@media (max-width: 1360px) {
   .nav-links { display: none; }
   .mobile-menu-toggle { display: flex; }
   .nav-call-btn span { display: none; }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1.1rem; }
+  /* Call and Enquiry are redundant with the floating-contact-dock (same
+     tel: link / openEnquiryModal()), which is already mobile-tuned and
+     persistent — dropping them from the top bar loses no functionality
+     and is what actually makes room for Login + Buy Now + the menu
+     toggle on a phone-width screen. */
+  .nav-call-btn, .nav-enquiry-btn { display: none; }
+  .brand-badge-next { display: none; }
+  .brand-name { font-size: 1.05rem; gap: 0.3rem; }
+  .nav-account-link { padding: 0.4rem 0.65rem; font-size: 0.74rem; min-height: 32px; }
+  .nav-cta-btn { padding: 0.55rem 0.9rem; font-size: 0.78rem; }
+  .nav-actions { gap: 0.55rem; }
   .variants-grid { grid-template-columns: 1fr; max-width: 480px; }
   .features-grid { grid-template-columns: 1fr; }
   .testimonials-grid { grid-template-columns: 1fr; }
@@ -2431,6 +2504,15 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .modal-backdrop { padding: 0.75rem; }
 }
 
+@media (max-width: 360px) {
+  .container { padding: 0 0.7rem; }
+  .nav-actions { gap: 0.35rem; }
+  .nav-cta-btn { padding: 0.5rem 0.6rem; }
+  .nav-cta-btn .arrow-icon { display: none; }
+  .nav-account-link { padding: 0.35rem 0.45rem; }
+  .mobile-menu-toggle { width: 24px; }
+}
+
 @media (max-width: 480px) {
   .hero-headline { font-size: 2.3rem; }
   .hero-cta-group { flex-direction: column; align-items: stretch; }
@@ -2438,6 +2520,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .cta-perks { flex-direction: column; gap: 0.5rem; }
   .testimonials-grid { grid-template-columns: 1fr; }
   .banner-badge { display: none; }
+  .banner-helpline-link span, .whatsapp-btn span { display: none; }
   .stage-machine-switch { flex-direction: column; width: 100%; }
   .stage-pill-btn { justify-content: center; }
   .hero-mode-switcher { width: 100%; }
@@ -2564,6 +2647,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .empty-state, .orders-empty-panel { text-align: center; padding: 3rem 1.5rem; }
 .empty-state-mark { margin-bottom: 0.8rem; }
 .empty-state p, .orders-empty-panel p { margin: 0.4rem auto 1.2rem; color: var(--text-secondary); font-size: 0.8rem; }
+.overview-orders-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 72px; padding: 1.2rem 0 0.4rem; }
+.overview-orders-summary strong { display: block; color: var(--text-primary); }
+.overview-orders-summary p { margin-top: 0.2rem; color: var(--text-secondary); font-size: 0.78rem; }
+.order-list { display: flex; flex-direction: column; gap: 1rem; }
+.order-card-heading { margin-bottom: 1rem; }
+.order-card-heading h3 { margin-top: 0.25rem; }
+.order-card-items { padding: 0.9rem 0; border-top: 1px solid var(--border-faint); border-bottom: 1px solid var(--border-faint); display: flex; flex-direction: column; gap: 0.5rem; }
+.order-card-items .cost-line { font-size: 0.79rem; }
+.order-card-total { padding-top: 0.9rem; font-size: 0.85rem; color: var(--text-primary); }
+.order-card-total strong { color: var(--text-white); }
 .dashboard-modal { z-index: 1200; }
 .address-modal { width: min(100%, 620px); max-height: 90vh; overflow: auto; background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--r-xl); box-shadow: var(--shadow-xl); }
 .address-modal .modal-header { position: sticky; top: 0; }
@@ -2595,5 +2688,78 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .section-panel-heading > .btn { align-self: flex-start; }
   .address-form { padding: 1.2rem 1rem 1.5rem; }
   .address-modal .modal-header { padding: 1.1rem 1rem; }
+}
+
+/* =====================================================================
+   ADMIN CONSOLE
+   ===================================================================== */
+.admin-shell { min-height: 100vh; }
+.admin-layout { width: min(100% - 3rem, 1240px); display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 3rem; margin: 0 auto; padding: 3.25rem 0 5rem; }
+.admin-sidebar { display: flex; flex-direction: column; min-height: 520px; min-width: 0; }
+.admin-sidebar h1 { margin-top: .35rem; color: var(--text-white); font-family: var(--font-display); font-size: 1.45rem; }
+.admin-nav { display: flex; flex-direction: column; gap: .3rem; margin-top: 2rem; }
+.admin-nav-link { padding: .75rem .85rem; border-radius: var(--r-sm); color: var(--text-secondary); font-size: .82rem; font-weight: 800; text-align: left; }
+.admin-nav-link:hover, .admin-nav-link.active { background: var(--orange-dim); color: var(--orange-light); }
+.admin-main { min-width: 0; }
+.admin-section { padding-top: .25rem; }
+.admin-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-faint); }
+.admin-heading h2 { margin-top: .25rem; color: var(--text-white); font-family: var(--font-display); font-size: 2rem; }
+.admin-heading p { margin-top: .35rem; color: var(--text-secondary); font-size: .82rem; }
+.admin-toolbar { display: flex; gap: .5rem; }
+.admin-toolbar input, .admin-detail-modal select { min-height: 38px; padding: .55rem .7rem; border: 1px solid var(--border-subtle); border-radius: var(--r-sm); background: var(--bg-surface-elevated); color: var(--text-primary); font: inherit; font-size: .78rem; }
+.admin-toolbar input:focus, .admin-detail-modal select:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-dim); }
+.admin-stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-top: 1.5rem; }
+.admin-stat-card strong { display: block; margin-top: 1rem; color: var(--text-white); font-family: var(--font-display); font-size: 2rem; }
+.admin-table-wrap { margin-top: 1.5rem; overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: var(--r-lg); background: rgba(17,22,34,.75); }
+.admin-table { width: 100%; border-collapse: collapse; min-width: 760px; }
+.admin-table th, .admin-table td { padding: .9rem 1rem; border-bottom: 1px solid var(--border-faint); color: var(--text-secondary); font-size: .76rem; text-align: left; vertical-align: top; }
+.admin-table th { color: var(--text-muted); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+.admin-table tr[data-order-id], .admin-table tr[data-customer-id] { cursor: pointer; }
+.admin-table tbody tr:hover { background: rgba(255,138,0,.06); }
+.admin-table strong, .admin-table small { display: block; }
+.admin-table strong { color: var(--text-primary); }
+.admin-table small { margin-top: .2rem; color: var(--text-muted); font-size: .68rem; }
+.admin-status { display: inline-flex; padding: .25rem .5rem; border: 1px solid var(--border-subtle); border-radius: var(--r-pill); color: var(--text-primary); font-size: .65rem; font-weight: 800; }
+.status-confirmed, .status-delivered { color: #69dc91; border-color: rgba(105,220,145,.35); }
+.status-cancelled { color: #ff9b9b; border-color: rgba(255,155,155,.35); }
+.status-pending { color: var(--orange-light); border-color: var(--border-orange); }
+.status-processing, .status-shipped { color: #7dc4ff; border-color: rgba(125,196,255,.35); }
+.admin-empty { padding: 2rem !important; text-align: center !important; }
+.admin-pagination { display: flex; align-items: center; justify-content: center; gap: .8rem; padding: 1.2rem 0; color: var(--text-secondary); font-size: .75rem; }
+.admin-modal { z-index: 1300; }
+.admin-detail-modal { width: min(100%, 760px); max-height: 90vh; overflow: auto; background: var(--bg-surface); border: 1px solid var(--border-medium); border-radius: var(--r-xl); box-shadow: var(--shadow-xl); }
+.admin-detail-body { padding: 1.5rem 2rem 2rem; color: var(--text-secondary); font-size: .8rem; }
+.admin-detail-body h3 { margin: 1.5rem 0 .6rem; color: var(--text-white); font-family: var(--font-display); }
+.admin-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.admin-detail-grid span, .admin-detail-grid strong, .admin-detail-grid small { display: block; }
+.payment-card { border: 1px solid var(--border-faint); border-radius: var(--r-lg); padding: 1rem 1.1rem; margin-bottom: .75rem; background: var(--bg-surface-2); }
+.payment-card .cost-line { font-size: .78rem; padding: .15rem 0; }
+.payment-card-actions { display: flex; gap: .6rem; padding-top: .75rem; }
+.payment-settings-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding-top: 1.5rem; }
+.payment-settings-hint { margin-top: .5rem; color: var(--text-muted); font-size: .68rem; line-height: 1.5; }
+.payment-settings-form { max-width: 480px; margin-top: 1.5rem; }
+.qr-image-preview-wrap { margin: .5rem 0 1rem; }
+.qr-image-preview-wrap img { width: 120px; height: 120px; object-fit: contain; background: #fff; border-radius: var(--r-sm); padding: 6px; }
+@media (max-width: 520px) {
+  .payment-settings-grid { grid-template-columns: 1fr; }
+}
+.admin-detail-grid span { color: var(--text-muted); font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.admin-detail-grid strong { margin-top: .3rem; color: var(--text-primary); }
+.admin-detail-grid small { margin-top: .25rem; color: var(--text-secondary); line-height: 1.5; }
+.admin-detail-grid select { display: block; margin: .45rem 0; }
+@media (max-width: 800px) {
+  .admin-layout { grid-template-columns: 1fr; gap: 1.5rem; padding-top: 2rem; }
+  .admin-sidebar { min-height: 0; }
+  .admin-nav { flex-direction: row; margin-top: 1rem; overflow-x: auto; min-width: 0; }
+  .admin-nav-link { flex: 0 0 auto; }
+  .admin-heading { align-items: flex-start; flex-direction: column; }
+  .admin-stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .admin-layout { width: min(100% - 2.2rem, 1240px); }
+  .admin-stat-grid, .admin-detail-grid { grid-template-columns: 1fr; }
+  .admin-toolbar { width: 100%; }
+  .admin-toolbar input { flex: 1; min-width: 0; }
+  .admin-detail-body { padding: 1.2rem 1rem 1.5rem; }
 }
 

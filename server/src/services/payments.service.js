@@ -145,6 +145,7 @@ async function verifyPayment(userId, input) {
 }
 
 async function handleWebhook(rawBody, signature) {
+  razorpayConfig.assertWebhookConfigured();
   if (!verifyWebhookSignature(rawBody, signature, razorpayConfig.RAZORPAY_WEBHOOK_SECRET)) {
     throw createHttpError(400, 'Invalid webhook signature.');
   }

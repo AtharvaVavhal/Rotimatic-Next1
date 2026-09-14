@@ -38,7 +38,7 @@
           <button class="dashboard-nav-link active" type="button" data-view="overview">Overview</button>
           <button class="dashboard-nav-link" type="button" data-view="profile">Profile</button>
           <button class="dashboard-nav-link" type="button" data-view="addresses">Addresses</button>
-          <button class="dashboard-nav-link nav-coming-soon" type="button" data-view="orders">Orders <span>Coming soon</span></button>
+          <button class="dashboard-nav-link" type="button" data-view="orders">Orders</button>
         </nav>
         <p class="sidebar-note">Your account details are protected by your Rotimatic session.</p>
       </aside>
@@ -68,8 +68,8 @@
               <button class="btn btn-secondary btn-small" type="button" data-view-target="addresses">Add an address</button>
             </article>
             <article class="dashboard-card orders-summary-card">
-              <div class="card-heading-row"><div><span class="card-eyebrow">Next chapter</span><h2>Orders</h2></div><span class="coming-soon-badge">Coming soon</span></div>
-              <div class="empty-orders"><span class="orders-icon" aria-hidden="true">◌</span><p>Order history will appear here once you place an order.</p></div>
+              <div class="card-heading-row"><div><span class="card-eyebrow">Recent activity</span><h2>Orders</h2></div><button class="text-action" type="button" data-view-target="orders">View all</button></div>
+              <div id="overviewOrdersSummary" class="empty-orders"><span class="orders-icon" aria-hidden="true">◌</span><p>Order history will appear here once you place an order.</p></div>
             </article>
           </div>
         </section>
@@ -101,8 +101,12 @@
         </section>
 
         <section class="dashboard-view" data-panel="orders" aria-labelledby="ordersTitle" hidden>
-          <div class="section-panel-heading"><div><span class="card-eyebrow">Coming soon</span><h2 id="ordersTitle">Orders</h2><p>Order history will appear here once you place an order.</p></div></div>
-          <div class="dashboard-card orders-empty-panel"><span class="orders-icon" aria-hidden="true">◌</span><h3>Your order history is on its way.</h3><p>There are no order or payment details to show yet.</p></div>
+          <div class="section-panel-heading"><div><span class="card-eyebrow">Order history</span><h2 id="ordersTitle">Orders</h2><p>Every Rotimatic NEXT order placed from this account.</p></div></div>
+          <div id="ordersMessage" class="inline-message" role="status" aria-live="polite"></div>
+          <button class="btn btn-secondary btn-small" id="retryOrdersButton" type="button" hidden>Retry</button>
+          <div id="ordersLoading" class="section-loading"><span class="loading-ring" aria-hidden="true"></span> Loading orders...</div>
+          <div id="orderList" class="order-list"></div>
+          <div id="ordersEmpty" class="dashboard-card orders-empty-panel" hidden><span class="orders-icon" aria-hidden="true">◌</span><h3>No orders yet.</h3><p>When you place a Rotimatic NEXT order, it will appear here.</p></div>
         </section>
       </main>
     </div>

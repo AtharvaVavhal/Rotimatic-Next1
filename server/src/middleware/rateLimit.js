@@ -31,4 +31,21 @@ const signupLimiter = rateLimit({
   message: { status: 'error', message: 'Too many signup attempts. Please try again later.' },
 });
 
-module.exports = { loginLimiter, signupLimiter };
+/**
+ * Applied to authenticated payment-initiation/verification endpoints
+ * (POST /api/payments/create-order, POST /api/payments/verify — see
+ * routes/payments.routes.js). These are behind requireAuth already, so
+ * this isn't guarding against anonymous abuse — it's bounding how many
+ * gateway calls / signature checks one account can trigger per window,
+ * since both paths call out to Razorpay and do crypto comparisons.
+ */
+const paymentsLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  skip: skipInTest,
+  message: { status: 'error', message: 'Too many payment requests. Please try again later.' },
+});
+
+module.exports = { loginLimiter, signupLimiter, paymentsLimiter };

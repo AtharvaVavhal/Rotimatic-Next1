@@ -61,10 +61,85 @@ async function confirmOrder(orderId, executor) {
   return rows[0] || null;
 }
 
+// ---------------------------------------------------------------------
+// Manual UPI/QR payments — same table, provider = 'manual_upi'. Kept as
+// separate functions from the Razorpay ones above so the two flows never
+// share a code path (Razorpay confirmation only ever happens through
+// signature/webhook verification; manual confirmation only ever happens
+// through the admin endpoints below).
+// ---------------------------------------------------------------------
+
+async function insertPendingManualPayment(data, executor) {
+  const { rows } = await exec(executor).query(
+    `INSERT INTO payments (order_id, provider, amount, currency, status, reference_id)
+     VALUES ($1, 'manual_upi', $2, $3, 'pending', $4)
+     RETURNING *`,
+    [data.orderId, data.amount, data.currency, data.referenceId]
+  );
+  return rows[0];
+}
+
+async function updateManualPaymentReference(paymentId, referenceId, executor) {
+  const { rows } = await exec(executor).query(
+    `UPDATE payments SET reference_id = $2
+     WHERE id = $1 AND provider = 'manual_upi' AND status = 'pending'
+     RETURNING *`,
+    [paymentId, referenceId]
+  );
+  return rows[0] || null;
+}
+
+async function resubmitManualPayment(paymentId, referenceId, executor) {
+  const { rows } = await exec(executor).query(
+    `UPDATE payments
+     SET reference_id = $2, status = 'pending', rejected_at = NULL, rejected_by = NULL, rejection_reason = NULL
+     WHERE id = $1 AND provider = 'manual_upi' AND status = 'rejected'
+     RETURNING *`,
+    [paymentId, referenceId]
+  );
+  return rows[0] || null;
+}
+
+async function findManualPaymentById(paymentId, executor) {
+  const { rows } = await exec(executor).query(
+    `SELECT * FROM payments WHERE id = $1 AND provider = 'manual_upi'`,
+    [paymentId]
+  );
+  return rows[0] || null;
+}
+
+async function confirmManualPayment(paymentId, adminId, executor) {
+  const { rows } = await exec(executor).query(
+    `UPDATE payments
+     SET status = 'captured', verified_at = now(), verified_by = $2
+     WHERE id = $1 AND provider = 'manual_upi' AND status = 'pending'
+     RETURNING *`,
+    [paymentId, adminId]
+  );
+  return rows[0] || null;
+}
+
+async function rejectManualPayment(paymentId, adminId, reason, executor) {
+  const { rows } = await exec(executor).query(
+    `UPDATE payments
+     SET status = 'rejected', rejected_at = now(), rejected_by = $2, rejection_reason = $3
+     WHERE id = $1 AND provider = 'manual_upi' AND status = 'pending'
+     RETURNING *`,
+    [paymentId, adminId, reason || null]
+  );
+  return rows[0] || null;
+}
+
 module.exports = {
   findPaymentForOrderUser,
   findByProviderOrderId,
   insertPendingPayment,
   updatePaymentState,
   confirmOrder,
+  insertPendingManualPayment,
+  updateManualPaymentReference,
+  resubmitManualPayment,
+  findManualPaymentById,
+  confirmManualPayment,
+  rejectManualPayment,
 };

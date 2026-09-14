@@ -96,6 +96,15 @@ async function findOrderForUser(orderId, userId, executor) {
   return rows[0] || null;
 }
 
+/**
+ * Admin-facing lookup with no owning-user restriction. Only used from the
+ * admin/manual-payment confirmation path, never exposed to a customer route.
+ */
+async function findOrderById(orderId, executor) {
+  const { rows } = await exec(executor).query(`SELECT * FROM orders WHERE id = $1`, [orderId]);
+  return rows[0] || null;
+}
+
 async function listOrderItems(orderId, executor) {
   const { rows } = await exec(executor).query(
     `SELECT product_name, variant, quantity, unit_price, total_price
@@ -114,5 +123,6 @@ module.exports = {
   insertOrderItem,
   listOrdersByUser,
   findOrderForUser,
+  findOrderById,
   listOrderItems,
 };

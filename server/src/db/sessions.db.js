@@ -30,7 +30,7 @@ async function findActiveSessionWithUser(sessionId) {
     `SELECT
        s.id AS session_id,
        s.expires_at,
-       u.id, u.first_name, u.last_name, u.email, u.phone, u.created_at, u.updated_at
+      u.id, u.first_name, u.last_name, u.email, u.phone, u.role, u.created_at, u.updated_at
      FROM sessions s
      JOIN users u ON u.id = s.user_id
      WHERE s.id = $1 AND s.expires_at > now()`,

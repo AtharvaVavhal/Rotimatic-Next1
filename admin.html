@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Console | Rotimatic NEXT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="admin-page">
+  <div class="dashboard-loading" id="adminLoading" role="status"><span class="loading-ring" aria-hidden="true"></span><span>Checking admin access...</span></div>
+  <div class="admin-shell" id="adminShell" hidden>
+    <header class="dashboard-topbar">
+      <a class="dashboard-brand" href="index.html" aria-label="Rotimatic NEXT home"><span class="auth-logo-mark">R</span><span>ROTIMATIC <small>NEXT</small></span></a>
+      <div class="dashboard-top-actions"><a class="dashboard-home-link" href="index.html">Back to site</a><button class="logout-button" id="adminLogout" type="button">Log out</button></div>
+    </header>
+    <div class="admin-layout">
+      <aside class="admin-sidebar" aria-label="Admin navigation">
+        <div><span class="card-eyebrow">Operations</span><h1>Admin console</h1></div>
+        <nav class="admin-nav"><button class="admin-nav-link active" data-section="dashboard" type="button">Dashboard</button><button class="admin-nav-link" data-section="orders" type="button">Orders</button><button class="admin-nav-link" data-section="customers" type="button">Customers</button><button class="admin-nav-link" data-section="payments" type="button">Payment Settings</button></nav>
+        <p class="sidebar-note">Razorpay orders confirm from verified Razorpay events only. UPI/QR orders confirm only after an admin verifies the payment here.</p>
+      </aside>
+      <main class="admin-main">
+        <div id="adminMessage" class="dashboard-message" role="status"></div>
+        <section class="admin-section active" data-section-panel="dashboard"><div class="admin-heading"><div><span class="section-kicker">Live operations</span><h2>Dashboard</h2><p>Real-time data from the Rotimatic database.</p></div></div><div class="admin-stat-grid" id="statGrid"></div></section>
+        <section class="admin-section" data-section-panel="orders" hidden><div class="admin-heading"><div><span class="section-kicker">Fulfillment</span><h2>Orders</h2><p>Review orders and update fulfillment status.</p></div><div class="admin-toolbar"><input id="orderSearch" placeholder="Search order or customer" aria-label="Search orders" /><button class="btn btn-secondary btn-small" id="orderSearchButton" type="button">Search</button></div></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Order</th><th>Customer</th><th>Product</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th></tr></thead><tbody id="ordersBody"></tbody></table></div><div class="admin-pagination" id="ordersPagination"></div></section>
+        <section class="admin-section" data-section-panel="customers" hidden><div class="admin-heading"><div><span class="section-kicker">Accounts</span><h2>Customers</h2><p>Customer summaries without authentication data.</p></div><div class="admin-toolbar"><input id="customerSearch" placeholder="Search name or email" aria-label="Search customers" /><button class="btn btn-secondary btn-small" id="customerSearchButton" type="button">Search</button></div></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Customer</th><th>Email</th><th>Orders</th><th>Confirmed spend</th><th>Joined</th></tr></thead><tbody id="customersBody"></tbody></table></div><div class="admin-pagination" id="customersPagination"></div></section>
+        <section class="admin-section" data-section-panel="payments" hidden>
+          <div class="admin-heading"><div><span class="section-kicker">Configuration</span><h2>Payment Settings</h2><p>Razorpay stays environment-configured. UPI/QR is configured here.</p></div></div>
+          <div class="payment-settings-grid">
+            <article class="admin-stat-card dashboard-card">
+              <span class="card-eyebrow">Razorpay</span>
+              <strong id="razorpayConfiguredBadge">—</strong>
+              <p class="payment-settings-hint">Key ID/secret and webhook secret are environment variables on the server. They are never shown here.</p>
+            </article>
+            <article class="admin-stat-card dashboard-card">
+              <span class="card-eyebrow">UPI / QR</span>
+              <strong id="manualUpiEnabledBadge">—</strong>
+              <p class="payment-settings-hint">Enabled once both a UPI ID and a QR image path are set below.</p>
+            </article>
+          </div>
+          <form id="paymentSettingsForm" class="payment-settings-form">
+            <div class="form-group">
+              <label for="upiIdInput">UPI ID</label>
+              <input type="text" id="upiIdInput" placeholder="client@upi" />
+            </div>
+            <div class="form-group">
+              <label for="qrImagePathInput">QR image path</label>
+              <input type="text" id="qrImagePathInput" placeholder="assets/qr-code.png" />
+              <p class="payment-settings-hint">Relative path under <code>assets/</code> on the deployed frontend (png/jpg/jpeg/webp/svg). Place the client's actual QR image file at that path first, then save the path here — this field does not upload a file.</p>
+            </div>
+            <div id="qrImagePreviewWrap" class="qr-image-preview-wrap" hidden><img id="qrImagePreview" alt="Current QR code" /></div>
+            <button type="submit" class="btn btn-primary btn-small">Save payment settings</button>
+          </form>
+          <p id="paymentSettingsMessage" class="dashboard-message" role="status"></p>
+        </section>
+      </main>
+    </div>
+  </div>
+  <div class="admin-modal modal-backdrop" id="adminModal" aria-hidden="true"><section class="admin-detail-modal" role="dialog" aria-modal="true" aria-labelledby="adminModalTitle"><div class="modal-header"><div><span class="card-eyebrow">Record detail</span><h2 id="adminModalTitle">Details</h2></div><button class="modal-close-btn" id="closeAdminModal" type="button" aria-label="Close details">✕</button></div><div id="adminModalBody" class="admin-detail-body"></div></section></div>
+  <script src="api-client.js"></script><script src="admin.js"></script>
+</body>
+</html>

@@ -1,8 +1,14 @@
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UPI_ID_RE = /^[a-zA-Z0-9.\-_]{2,100}@[a-zA-Z]{2,64}$/;
+// Deliberately restrictive: a relative path under assets/ with a plain image
+// extension. No "..", no leading slash, no arbitrary filesystem paths.
+const QR_IMAGE_PATH_RE = /^assets\/[a-zA-Z0-9][a-zA-Z0-9._-]{0,118}\.(png|jpg|jpeg|webp|svg)$/;
+const MANUAL_PAYMENT_REFERENCE_RE = /^[A-Za-z0-9\-/]{4,64}$/;
 
 const MIN_PASSWORD_LENGTH = 8;
 const MAX_ORDER_QUANTITY = 10;
+const MAX_REJECTION_REASON_LENGTH = 500;
 
 function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
@@ -14,6 +20,18 @@ function isValidEmail(value) {
 
 function isUuid(value) {
   return typeof value === 'string' && UUID_RE.test(value);
+}
+
+function isValidUpiId(value) {
+  return typeof value === 'string' && UPI_ID_RE.test(value.trim());
+}
+
+function isValidQrImagePath(value) {
+  return typeof value === 'string' && QR_IMAGE_PATH_RE.test(value.trim());
+}
+
+function isValidManualPaymentReference(value) {
+  return typeof value === 'string' && MANUAL_PAYMENT_REFERENCE_RE.test(value.trim());
 }
 
 /**
@@ -155,11 +173,57 @@ function validateCreateOrderPayload(body = {}) {
   return errors;
 }
 
+function validateManualPaymentPayload(body = {}) {
+  const errors = [];
+
+  if (!isUuid(body.orderId)) errors.push('orderId must be a valid UUID.');
+  if (!isValidManualPaymentReference(body.referenceId)) {
+    errors.push('referenceId must be 4-64 characters (letters, numbers, - or /).');
+  }
+
+  return errors;
+}
+
+function validateRejectPaymentPayload(body = {}) {
+  const errors = [];
+
+  if (body.reason !== undefined && body.reason !== null) {
+    if (typeof body.reason !== 'string' || body.reason.length > MAX_REJECTION_REASON_LENGTH) {
+      errors.push(`reason must be a string up to ${MAX_REJECTION_REASON_LENGTH} characters.`);
+    }
+  }
+
+  return errors;
+}
+
+function validatePaymentSettingsPayload(body = {}) {
+  const errors = [];
+  let hasAnyField = false;
+
+  if (body.upiId !== undefined) {
+    hasAnyField = true;
+    if (!isValidUpiId(body.upiId)) errors.push('upiId must be a valid UPI ID, e.g. name@bank.');
+  }
+  if (body.qrImagePath !== undefined) {
+    hasAnyField = true;
+    if (!isValidQrImagePath(body.qrImagePath)) {
+      errors.push('qrImagePath must be a relative assets/ path ending in .png, .jpg, .jpeg, .webp, or .svg.');
+    }
+  }
+
+  if (!hasAnyField) errors.push('At least one of upiId, qrImagePath must be provided.');
+
+  return errors;
+}
+
 module.exports = {
   MIN_PASSWORD_LENGTH,
   isNonEmptyString,
   isValidEmail,
   isUuid,
+  isValidUpiId,
+  isValidQrImagePath,
+  isValidManualPaymentReference,
   validateSignupPayload,
   validateLoginPayload,
   validateUpdateProfilePayload,
@@ -167,4 +231,7 @@ module.exports = {
   validateUpdateAddressPayload,
   MAX_ORDER_QUANTITY,
   validateCreateOrderPayload,
+  validateManualPaymentPayload,
+  validateRejectPaymentPayload,
+  validatePaymentSettingsPayload,
 };

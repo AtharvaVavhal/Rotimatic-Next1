@@ -17,7 +17,8 @@ const appState = {
   current360Frame: 1,
   checkoutAddresses: [],
   createdOrder: null,
-  selectedPaymentMethod: 'upi',
+  selectedPaymentMethod: 'razorpay',
+  manualPaymentConfig: null,
   variants: {
     black: {
       key: 'black',
@@ -428,8 +429,10 @@ function openCheckoutModal(variantKey = null) {
   const modal = document.getElementById('checkoutModal');
   if (!modal) return;
 
+  resetPaymentStepUI();
   goToCheckoutStep(1);
   loadCheckoutAddresses();
+  loadPaymentConfig();
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -549,6 +552,125 @@ async function loadCheckoutAddresses() {
     if (message) message.textContent = 'We could not load your saved addresses. Please try again.';
   } finally {
     select.disabled = false;
+  }
+}
+
+/* ==========================================================================
+   7b. PAYMENT METHOD SELECTION (Razorpay vs. UPI / QR Scanner)
+   ========================================================================== */
+function resetPaymentStepUI() {
+  appState.selectedPaymentMethod = 'razorpay';
+  const razorpayRadio = document.querySelector('input[name="paymentMethod"][value="razorpay"]');
+  if (razorpayRadio) razorpayRadio.checked = true;
+
+  const reviewPanel = document.getElementById('orderReviewPanel');
+  const qrPanel = document.getElementById('qrPaymentPanel');
+  if (reviewPanel) reviewPanel.hidden = false;
+  if (qrPanel) qrPanel.hidden = true;
+
+  const referenceInput = document.getElementById('upiReferenceInput');
+  if (referenceInput) referenceInput.value = '';
+  const upiMessage = document.getElementById('upiSubmitMessage');
+  if (upiMessage) upiMessage.textContent = '';
+
+  const placeBtn = document.getElementById('placeOrderBtn');
+  if (placeBtn) placeBtn.textContent = 'Create Pending Order';
+}
+
+async function loadPaymentConfig() {
+  if (!window.RotimaticApi) return;
+  try {
+    const response = await RotimaticApi.manualPaymentConfig();
+    appState.manualPaymentConfig = response.data.config;
+  } catch (error) {
+    appState.manualPaymentConfig = { enabled: false, upiId: null, qrImagePath: null };
+  }
+
+  const config = appState.manualPaymentConfig;
+  const manualRadio = document.querySelector('input[name="paymentMethod"][value="manual_upi"]');
+  const unavailableNote = document.getElementById('manualUpiUnavailableNote');
+  if (!config || !config.enabled) {
+    if (manualRadio) manualRadio.disabled = true;
+    if (unavailableNote) unavailableNote.hidden = false;
+    if (appState.selectedPaymentMethod === 'manual_upi') setPaymentMethod('razorpay');
+  } else {
+    if (manualRadio) manualRadio.disabled = false;
+    if (unavailableNote) unavailableNote.hidden = true;
+  }
+}
+
+function setPaymentMethod(method) {
+  appState.selectedPaymentMethod = method;
+  const razorpayRadio = document.querySelector('input[name="paymentMethod"][value="razorpay"]');
+  const manualRadio = document.querySelector('input[name="paymentMethod"][value="manual_upi"]');
+  if (razorpayRadio) razorpayRadio.checked = method === 'razorpay';
+  if (manualRadio) manualRadio.checked = method === 'manual_upi';
+
+  const placeBtn = document.getElementById('placeOrderBtn');
+  if (placeBtn) placeBtn.textContent = method === 'manual_upi' ? 'Continue to UPI Payment' : 'Create Pending Order';
+}
+
+function showQrPaymentPanel(order) {
+  const config = appState.manualPaymentConfig;
+  const reviewPanel = document.getElementById('orderReviewPanel');
+  const qrPanel = document.getElementById('qrPaymentPanel');
+  if (reviewPanel) reviewPanel.hidden = true;
+  if (qrPanel) qrPanel.hidden = false;
+
+  const img = document.getElementById('qrPaymentImage');
+  if (img && config && config.qrImagePath) img.src = config.qrImagePath;
+  const upiIdEl = document.getElementById('qrUpiId');
+  if (upiIdEl) upiIdEl.textContent = config && config.upiId ? config.upiId : '—';
+  const amountEl = document.getElementById('qrAmount');
+  if (amountEl) amountEl.textContent = `₹${Number(order.totalAmount).toLocaleString('en-IN')}`;
+}
+
+function backToOrderReview() {
+  const reviewPanel = document.getElementById('orderReviewPanel');
+  const qrPanel = document.getElementById('qrPaymentPanel');
+  if (qrPanel) qrPanel.hidden = true;
+  if (reviewPanel) reviewPanel.hidden = false;
+}
+
+async function submitManualPaymentReference() {
+  const input = document.getElementById('upiReferenceInput');
+  const message = document.getElementById('upiSubmitMessage');
+  const btn = document.getElementById('upiPaidBtn');
+  if (!input || !btn) return;
+
+  const referenceId = input.value.trim();
+  if (!referenceId) {
+    if (message) message.textContent = 'Enter your UPI transaction ID to continue.';
+    return;
+  }
+  if (!appState.createdOrder) {
+    if (message) message.textContent = 'Order not found. Please go back and try again.';
+    return;
+  }
+
+  const origHtml = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>Submitting...</span>';
+  if (message) message.textContent = '';
+
+  try {
+    await RotimaticApi.submitManualPayment({ orderId: appState.createdOrder.id, referenceId });
+    renderOrderConfirmation(appState.createdOrder, 'pending');
+    const statusEl = document.getElementById('confStatus');
+    if (statusEl) statusEl.textContent = 'Pending verification';
+    const subtitleEl = document.querySelector('#checkoutStep3 .conf-subtitle');
+    if (subtitleEl) subtitleEl.textContent = 'Your payment reference was submitted and is awaiting admin verification.';
+    goToCheckoutStep(3);
+    showToast('Payment reference submitted. Your order is pending verification.', 'orange');
+  } catch (error) {
+    if (error.status === 401) {
+      window.location.href = 'login.html';
+      return;
+    }
+    if (message) message.textContent = error.message || 'We could not submit your payment reference. Please try again.';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = origHtml;
   }
 }
 
@@ -715,8 +837,13 @@ async function processRealOrder() {
     const order = response.data.order;
     createdOrder = order;
     appState.createdOrder = order;
-    const paymentResponse = await RotimaticApi.createPaymentOrder({ orderId: order.id });
-    await openRazorpayCheckout(order, paymentResponse.data.payment);
+
+    if (appState.selectedPaymentMethod === 'manual_upi') {
+      showQrPaymentPanel(order);
+    } else {
+      const paymentResponse = await RotimaticApi.createPaymentOrder({ orderId: order.id });
+      await openRazorpayCheckout(order, paymentResponse.data.payment);
+    }
   } catch (error) {
     if (error.status === 401) {
       window.location.href = 'login.html';

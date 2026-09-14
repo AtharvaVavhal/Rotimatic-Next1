@@ -147,7 +147,8 @@ Defined in `server/migrations/001_initial_schema.js`. No seed data — schema on
 | `addresses` | A user's saved addresses | Cascades on user delete; partial unique index allows only one `is_default = true` row per user |
 | `orders` | Placed orders | `order_number` unique; `status` restricted to `pending/confirmed/processing/shipped/delivered/cancelled`; stores a **snapshot** of the shipping address (not a foreign key to `addresses`, since a user may later edit/delete that address) |
 | `order_items` | Line items per order | Cascades on order delete; `quantity > 0`; prices non-negative |
-| `payments` | Payment attempts per order | `provider`-scoped, so Razorpay (or another gateway) can be added later; `provider_order_id`/`provider_payment_id` are nullable since a payment starts `pending` before either exists |
+| `payments` | Payment attempts per order | `provider`-scoped (`razorpay` or `manual_upi`), so a second gateway/flow can share the table; `provider_order_id`/`provider_payment_id` are Razorpay-only and nullable since a payment starts `pending` before either exists; `reference_id` is the customer-supplied UPI transaction id (manual payments only); `verified_at`/`verified_by` and `rejected_at`/`rejected_by`/`rejection_reason` record the admin's manual-payment review, never set for Razorpay rows |
+| `payment_settings` | Single-row (`id = 1`) UPI/QR configuration | `upi_id` and `qr_image_path` start `NULL` — no fabricated UPI ID or QR ships by default; only an admin can set them |
 
 All primary keys are `UUID DEFAULT gen_random_uuid()` (via the `pgcrypto` extension) — the database generates IDs, not the client. All monetary columns use `NUMERIC(12,2)` (never floating point), with an explicit `currency` column (`INR` by default). `updated_at` columns are maintained automatically by a database trigger, not application code.
 
@@ -216,6 +217,40 @@ Payment endpoints require the authenticated session except for the signed webhoo
 
 Amounts are derived from the local PostgreSQL order and converted to INR paise without floating-point arithmetic. Successful verified captures transition `pending` to `confirmed`; failed payments leave the local order payable and pending. Verification and webhook updates are idempotent, and local payment/order writes use a short PostgreSQL transaction after external provider calls complete. Refunds and other fulfillment transitions are not implemented yet. Live Checkout testing requires Razorpay sandbox credentials; automated tests mock only the external SDK boundary and use real PostgreSQL.
 
+`RAZORPAY_KEY_ID`/`RAZORPAY_KEY_SECRET`/`RAZORPAY_WEBHOOK_SECRET` are always backend environment variables (`server/.env`, never committed, never sent to the frontend). Production Razorpay credentials belong to the client deploying this site — this repository ships with none configured.
+
+### Manual UPI / QR payments
+
+A second, non-gateway payment method for customers who pay by scanning a fixed UPI QR code outside the app. It is deliberately kept separate from the Razorpay flow above — an admin can confirm a manual UPI payment, but nothing in the codebase lets an admin (or the frontend) confirm a Razorpay payment; Razorpay orders only ever confirm through a verified signature or webhook event.
+
+```
+Razorpay:    Customer -> Razorpay Checkout -> Razorpay -> signature/webhook verification -> captured -> order confirmed
+Manual UPI:  Customer -> scans the client's fixed QR -> pays externally -> submits a UPI reference id -> pending verification -> admin checks the real payment and confirms/rejects -> order confirmed (or stays pending)
+```
+
+**Client setup (required before this method is usable):** the QR/UPI ID are not shipped with the project — `payment_settings` starts empty and the frontend reports UPI/QR as unavailable until configured. To enable it:
+
+1. Place the client's real UPI QR code image under `assets/` in the deployed frontend (e.g. `assets/qr-code.png`).
+2. As an admin, open `admin.html` → **Payment Settings**, and set the **UPI ID** (e.g. `client@upi`) and **QR image path** to the relative path from step 1. The QR image path is validated server-side to a relative `assets/<name>.(png|jpg|jpeg|webp|svg)` path — no arbitrary filesystem paths, and no file is uploaded through this form.
+
+Customer-facing endpoint (public, no secrets returned):
+
+| Method & path | Auth required | Purpose |
+|---|---|---|
+| `GET /api/payments/manual/config` | No | Returns `{ enabled, upiId, qrImagePath }`; `enabled` is `false` (with `null` fields) until an admin has configured both values — the frontend never fabricates a QR code or UPI ID |
+| `POST /api/payments/manual` | Yes | Records a pending manual-payment submission (`orderId`, `referenceId`) for an order the caller owns. Amount/currency always come from the local order, never the client. Resubmitting for the same pending (or previously rejected) order updates the one row instead of creating a duplicate. Never marks the order paid. |
+
+Admin-only endpoints (session + `role = 'admin'`, same as the rest of `/api/admin`):
+
+| Method & path | Purpose |
+|---|---|
+| `GET /api/admin/payment-settings` | Read `razorpayConfigured` (boolean only — never the secret values), `manualUpiEnabled`, `upiId`, `qrImagePath` |
+| `PATCH /api/admin/payment-settings` | Set `upiId` and/or `qrImagePath` |
+| `POST /api/admin/payments/:id/confirm` | Confirm a `manual_upi` payment after checking the client's real UPI/bank account; transitions the payment to `captured` and the order to `confirmed`. 404s (not "confirmed") if `:id` is a Razorpay payment. Idempotent — confirming an already-captured payment just re-reports it. |
+| `POST /api/admin/payments/:id/reject` | Reject a `manual_upi` payment with an optional `reason`; the order is left `pending`, never confirmed. 404s for a Razorpay payment id. Idempotent for an already-rejected payment; conflicts (`409`) against an already-captured one. |
+
+The admin order-detail view (`admin.html` → Orders → open an order) shows a payment card per attempt — Razorpay shows method/amount/status/payment id, manual UPI additionally shows the customer's UPI reference and submission time, with **Confirm Payment** / **Reject Payment** buttons that only appear while that payment is `pending`.
+
 ### Account pages
 
 - `login.html` / `login.js` provide session-based login and link to account creation.
@@ -223,6 +258,18 @@ Amounts are derived from the local PostgreSQL order and converted to INR paise w
 - `dashboard.html` / `dashboard.js` provide the authenticated overview, profile editing, saved-address management, and logout flow.
 - `api-client.js` sends API requests with `credentials: 'include'`; passwords, session IDs, and cookies are never stored in `localStorage`.
 - The dashboard's Orders section is intentionally marked **Coming soon**. No fake order, payment, or checkout data is displayed.
+
+### Admin console
+
+`admin.html` and `admin.js` provide a server-authorized operations console for dashboard statistics, paginated orders, order details, fulfillment status updates, customer summaries, and payment settings. Users are `customer` by default; the additive role migration also supports `admin`. Every `/api/admin/*` route requires the existing HTTP-only session plus the persisted server-side admin role. Payment status is never directly editable from the admin console (the order status dropdown only covers fulfillment states) — a Razorpay payment's `captured`/`confirmed` state still comes only from a verified signature or webhook event, and a manual UPI payment only reaches `captured`/`confirmed` through the admin's explicit Confirm Payment action (see [Manual UPI / QR payments](#manual-upi--qr-payments)).
+
+For local development, promote an existing account by supplying its email at runtime:
+
+```bash
+npm run admin:promote -- user@example.com
+```
+
+This command uses parameterized SQL and does not create or embed a default admin password.
 
 When running the static frontend separately during local development, set `FRONTEND_URL` to the exact frontend origin (for example `http://127.0.0.1:5500`). The frontend uses the configured local API port (`5001`) for local previews and same-origin `/api` requests in deployed hosting.
 

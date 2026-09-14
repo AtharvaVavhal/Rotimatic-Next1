@@ -11,6 +11,7 @@ function toSafeUser(row) {
     lastName: row.last_name,
     email: row.email,
     phone: row.phone,
+    role: row.role || 'customer',
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const state = { user: null, addresses: [], editingAddressId: null };
+  const state = { user: null, addresses: [], orders: [], editingAddressId: null };
   const loading = document.getElementById('dashboardLoading');
   const shell = document.getElementById('dashboardShell');
   const dashboardMessage = document.getElementById('dashboardMessage');
@@ -10,10 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const profileForm = document.getElementById('profileForm');
 
   const redirectToLogin = () => { window.location.replace('login.html'); };
+  const messageBaseClass = (element) => element.id === 'dashboardMessage' ? 'dashboard-message' : (element.id === 'addressMessage' || element.id === 'ordersMessage') ? 'inline-message' : 'form-message';
   const showMessage = (element, text, type = 'success') => {
+    const baseClass = messageBaseClass(element);
     element.textContent = text;
-    element.className = `${element.id === 'dashboardMessage' ? 'dashboard-message' : element.id === 'addressMessage' ? 'inline-message' : 'form-message'} ${type}`;
-    if (text) window.setTimeout(() => { element.textContent = ''; element.className = element.id === 'dashboardMessage' ? 'dashboard-message' : element.id === 'addressMessage' ? 'inline-message' : 'form-message'; }, 5000);
+    element.className = `${baseClass} ${type}`;
+    if (text) window.setTimeout(() => { element.textContent = ''; element.className = baseClass; }, 5000);
   };
   const handleError = (error, element) => {
     if (error.status === 401) { redirectToLogin(); return; }
@@ -22,7 +24,11 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   const initials = (user) => `${user.firstName || ''} ${user.lastName || ''}`.trim().split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase() || 'R';
   const formatDate = (value) => value ? new Intl.DateTimeFormat(undefined, { month: 'short', year: 'numeric' }).format(new Date(value)) : '-';
+  const formatOrderDate = (value) => value ? new Intl.DateTimeFormat(undefined, { dateStyle: 'medium' }).format(new Date(value)) : '-';
   const formatAddress = (address) => [address.addressLine1, address.addressLine2, address.city, address.state, address.postalCode, address.country].filter(Boolean).join(', ');
+  const money = (value, currency = 'INR') => `${currency} ${Number(value || 0).toLocaleString('en-IN', { minimumFractionDigits: 2 })}`;
+  const ORDER_STATUS_LABELS = { pending: 'Pending', confirmed: 'Confirmed', processing: 'Processing', shipped: 'Shipped', delivered: 'Delivered', cancelled: 'Cancelled' };
+  const orderStatusLabel = (status) => ORDER_STATUS_LABELS[status] || status;
 
   function renderUser() {
     const user = state.user;
@@ -82,13 +88,58 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await RotimaticApi.addresses();
       state.addresses = response.data.addresses || [];
       renderAddresses();
-    } catch (error) { handleError(error, addressMessage); }
+    } catch (error) {
+      document.getElementById('addressLoading').hidden = true;
+      handleError(error, addressMessage);
+    }
+  }
+
+  function renderOverviewOrders() {
+    const summary = document.getElementById('overviewOrdersSummary');
+    const order = state.orders[0];
+    if (!order) {
+      summary.className = 'empty-orders';
+      summary.innerHTML = '<span class="orders-icon" aria-hidden="true">◌</span><p>Order history will appear here once you place an order.</p>';
+      return;
+    }
+    const items = order.items.map((item) => `${item.productName} × ${item.quantity}`).join(', ');
+    summary.className = 'overview-orders-summary';
+    summary.innerHTML = `<div><strong>${escapeHtml(order.orderNumber)}</strong><p>${escapeHtml(items)}</p></div><span class="admin-status status-${escapeHtml(order.status)}">${escapeHtml(orderStatusLabel(order.status))}</span>`;
+  }
+
+  function renderOrderCard(order) {
+    const itemLines = order.items.map((item) => `<div class="cost-line"><span>${escapeHtml(item.productName)} · ${escapeHtml(item.variant)} × ${item.quantity}</span><strong>${money(item.totalPrice, order.currency)}</strong></div>`).join('');
+    return `<article class="dashboard-card order-card"><div class="card-heading-row order-card-heading"><div><span class="card-eyebrow">${formatOrderDate(order.createdAt)}</span><h3>${escapeHtml(order.orderNumber)}</h3></div><span class="admin-status status-${escapeHtml(order.status)}">${escapeHtml(orderStatusLabel(order.status))}</span></div><div class="order-card-items">${itemLines}</div><div class="cost-line order-card-total"><span>Total</span><strong>${money(order.totalAmount, order.currency)}</strong></div></article>`;
+  }
+
+  function renderOrders() {
+    document.getElementById('ordersLoading').hidden = true;
+    document.getElementById('orderList').innerHTML = state.orders.map(renderOrderCard).join('');
+    document.getElementById('ordersEmpty').hidden = state.orders.length !== 0;
+    renderOverviewOrders();
+  }
+
+  async function loadOrders() {
+    document.getElementById('ordersLoading').hidden = false;
+    document.getElementById('orderList').innerHTML = '';
+    document.getElementById('ordersEmpty').hidden = true;
+    document.getElementById('retryOrdersButton').hidden = true;
+    try {
+      const response = await RotimaticApi.orders();
+      state.orders = response.data.orders || [];
+      renderOrders();
+    } catch (error) {
+      document.getElementById('ordersLoading').hidden = true;
+      document.getElementById('retryOrdersButton').hidden = false;
+      handleError(error, document.getElementById('ordersMessage'));
+    }
   }
 
   function setView(view) {
     document.querySelectorAll('.dashboard-nav-link').forEach((button) => button.classList.toggle('active', button.dataset.view === view));
     document.querySelectorAll('.dashboard-view').forEach((panel) => { const active = panel.dataset.panel === view; panel.classList.toggle('active', active); panel.hidden = !active; });
     if (view === 'addresses' && !document.getElementById('addressList').children.length && !state.addresses.length) loadAddresses();
+    if (view === 'orders' && !document.getElementById('orderList').children.length && !state.orders.length) loadOrders();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -122,6 +173,8 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('cancelAddressButton').addEventListener('click', closeAddressForm);
   addressModal.addEventListener('click', (event) => { if (event.target === addressModal) closeAddressForm(); });
   document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && addressModal.classList.contains('active')) closeAddressForm(); });
+
+  document.getElementById('retryOrdersButton').addEventListener('click', loadOrders);
 
   profileForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -172,7 +225,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const response = await RotimaticApi.me();
       if (!response || !response.data || !response.data.authenticated) { redirectToLogin(); return; }
-      state.user = response.data.user; renderUser(); await loadAddresses();
+      state.user = response.data.user; renderUser();
+      await Promise.all([loadAddresses(), loadOrders()]);
       shell.hidden = false; loading.hidden = true;
     } catch (error) {
       if (error.status === 401) { redirectToLogin(); return; }

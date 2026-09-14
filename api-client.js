@@ -40,7 +40,11 @@
     updateAddress: (id, body) => request(`/addresses/${encodeURIComponent(id)}`, { method: 'PATCH', body: JSON.stringify(body) }),
     deleteAddress: (id) => request(`/addresses/${encodeURIComponent(id)}`, { method: 'DELETE' }),
     createOrder: (body) => request('/orders', { method: 'POST', body: JSON.stringify(body) }),
+    orders: () => request('/orders'),
+    order: (id) => request(`/orders/${encodeURIComponent(id)}`),
     createPaymentOrder: (body) => request('/payments/create-order', { method: 'POST', body: JSON.stringify(body) }),
-    verifyPayment: (body) => request('/payments/verify', { method: 'POST', body: JSON.stringify(body) })
+    verifyPayment: (body) => request('/payments/verify', { method: 'POST', body: JSON.stringify(body) }),
+    manualPaymentConfig: () => request('/payments/manual/config'),
+    submitManualPayment: (body) => request('/payments/manual', { method: 'POST', body: JSON.stringify(body) })
   };
 })(window);
