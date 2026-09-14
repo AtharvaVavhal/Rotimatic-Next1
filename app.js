@@ -88,6 +88,11 @@ function setHeroViewMode(mode) {
   const btn360 = document.getElementById('btnMode360');
   const viewSpotlight = document.getElementById('viewSpotlight');
   const view360 = document.getElementById('view360');
+  const card = document.getElementById('product3DCard');
+
+  if (card) {
+    card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  }
 
   if (mode === 'spotlight') {
     btnSpotlight.classList.add('active');
@@ -113,56 +118,140 @@ function init360Viewer() {
   if (!container || !turnaroundImg) return;
 
   let isDragging = false;
-  let startX = 0;
-  const pixelsPerFrame = 28; // drag distance required to change 1 frame
   let accumulatedDelta = 0;
+  const pixelsPerFrame = 16; // Smooth responsive sensitivity
+  let lastX = 0;
+  let lastTime = 0;
+  let velocity = 0;
+  let momentumRaf = null;
+
+  function stopMomentum() {
+    if (momentumRaf) {
+      cancelAnimationFrame(momentumRaf);
+      momentumRaf = null;
+    }
+  }
+
+  function startDrag(clientX) {
+    stopMomentum();
+    isDragging = true;
+    lastX = clientX;
+    lastTime = performance.now();
+    accumulatedDelta = 0;
+    velocity = 0;
+    container.classList.add('is-dragging');
+  }
+
+  function onDragMove(clientX) {
+    if (!isDragging) return;
+    const now = performance.now();
+    const dt = Math.max(now - lastTime, 1);
+    const deltaX = clientX - lastX;
+
+    velocity = (deltaX / dt) * 16.67;
+    lastX = clientX;
+    lastTime = now;
+
+    accumulatedDelta += deltaX;
+
+    if (Math.abs(accumulatedDelta) >= pixelsPerFrame) {
+      const stepCount = Math.trunc(accumulatedDelta / pixelsPerFrame);
+      accumulatedDelta -= stepCount * pixelsPerFrame;
+      step360Frame(stepCount);
+    }
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    container.classList.remove('is-dragging');
+
+    // Smooth inertial momentum on release
+    if (Math.abs(velocity) > 3) {
+      let currentVelocity = velocity;
+      function applyMomentum() {
+        if (isDragging) return;
+        currentVelocity *= 0.88;
+        accumulatedDelta += currentVelocity;
+
+        if (Math.abs(accumulatedDelta) >= pixelsPerFrame) {
+          const stepCount = Math.trunc(accumulatedDelta / pixelsPerFrame);
+          accumulatedDelta -= stepCount * pixelsPerFrame;
+          step360Frame(stepCount);
+        }
+
+        if (Math.abs(currentVelocity) > 0.35) {
+          momentumRaf = requestAnimationFrame(applyMomentum);
+        }
+      }
+      momentumRaf = requestAnimationFrame(applyMomentum);
+    }
+  }
 
   // Mouse drag handlers
   container.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    startX = e.clientX;
-    accumulatedDelta = 0;
-    container.style.cursor = 'grabbing';
+    e.preventDefault();
+    startDrag(e.clientX);
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      onDragMove(e.clientX);
+    }
   });
 
   window.addEventListener('mouseup', () => {
     if (isDragging) {
-      isDragging = false;
-      container.style.cursor = 'grab';
+      endDrag();
     }
-  });
-
-  container.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    const deltaX = e.clientX - startX;
-    startX = e.clientX;
-    handleRotationStep(deltaX);
   });
 
   // Touch drag handlers (Mobile)
   container.addEventListener('touchstart', (e) => {
     if (e.touches.length === 1) {
-      isDragging = true;
-      startX = e.touches[0].clientX;
-      accumulatedDelta = 0;
+      startDrag(e.touches[0].clientX);
     }
   }, { passive: true });
 
-  container.addEventListener('touchend', () => {
-    isDragging = false;
-  });
-
-  container.addEventListener('touchmove', (e) => {
-    if (!isDragging || e.touches.length !== 1) return;
-    const currentX = e.touches[0].clientX;
-    const deltaX = currentX - startX;
-    startX = currentX;
-    handleRotationStep(deltaX);
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging && e.touches.length === 1) {
+      onDragMove(e.touches[0].clientX);
+    }
   }, { passive: true });
 
-  // Handle dot clicks
+  window.addEventListener('touchend', () => {
+    if (isDragging) {
+      endDrag();
+    }
+  });
+
+  window.addEventListener('touchcancel', () => {
+    if (isDragging) {
+      endDrag();
+    }
+  });
+
+  // Keyboard navigation when container is focused
+  container.setAttribute('tabindex', '0');
+  container.setAttribute('role', 'region');
+  container.setAttribute('aria-label', '360 degree product viewer. Drag horizontally or use left and right arrow keys to rotate.');
+  container.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      stopMomentum();
+      step360Frame(-1);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      stopMomentum();
+      step360Frame(1);
+    }
+  });
+
+  // Interactive Dot Navigation
   document.querySelectorAll('.turnaround-dots-row .t-dot').forEach(dot => {
     dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      stopMomentum();
       const targetFrame = parseInt(e.currentTarget.getAttribute('data-frame'), 10);
       if (!isNaN(targetFrame)) {
         set360Frame(targetFrame);
@@ -171,21 +260,11 @@ function init360Viewer() {
   });
 }
 
-function handleRotationStep(deltaX) {
-  // Dragging right rotates forward, dragging left rotates backward
-  const threshold = 22;
-  if (Math.abs(deltaX) < 1) return;
-
-  let nextFrame = appState.current360Frame;
-  if (deltaX > threshold / 2) {
-    nextFrame = appState.current360Frame + 1;
-    if (nextFrame > 7) nextFrame = 1;
-    set360Frame(nextFrame);
-  } else if (deltaX < -threshold / 2) {
-    nextFrame = appState.current360Frame - 1;
-    if (nextFrame < 1) nextFrame = 7;
-    set360Frame(nextFrame);
-  }
+function step360Frame(stepDelta) {
+  const total = appState.turnaroundFrames.length || 7;
+  let next = (appState.current360Frame - 1 + stepDelta) % total;
+  if (next < 0) next += total;
+  set360Frame(next + 1);
 }
 
 function set360Frame(frameIndex) {
@@ -204,7 +283,6 @@ function set360Frame(frameIndex) {
     angleLabel.textContent = frameData.label;
   }
 
-  // Update dots
   dots.forEach(dot => {
     const f = parseInt(dot.getAttribute('data-frame'), 10);
     dot.classList.toggle('active', f === frameIndex);
