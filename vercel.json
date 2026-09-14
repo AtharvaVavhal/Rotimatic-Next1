@@ -4,5 +4,19 @@
       "source": "/api/:path*",
       "destination": "https://rotimatic-next1-production.up.railway.app/api/:path*"
     }
+  ],
+  "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(styles.css|app.js|api-client.js|account-nav.js|styles.min.css|app.min.js|api-client.min.js|account-nav.min.js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+      ]
+    }
   ]
 }
